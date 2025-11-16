@@ -1,0 +1,31 @@
+{
+  "name": "ui-desu",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "author": {
+    "name": "sergiocortes-dll",
+    "url": "https://twitter.com/sergiocortes-dll"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "uidesu:dev": "turbo --filter=uidesu dev",
+    "uidesu": "pnpm --filter=uidesu start:dev"
+  },
+  "packageManager": "pnpm@10.16.1",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "turbo": "^1.9.9"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.2.2",
+      "@types/react-dom": "19.2.2"
+    }
+  }
+}
