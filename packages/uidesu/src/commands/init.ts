@@ -1,11 +1,15 @@
+import * as ERRORS from "@/src/utils/errors";
 import { Command } from 'commander';
 import fsExtra from 'fs-extra';
 import path from 'path';
 import z from 'zod';
+import { preFlightInit } from '../preflights/preflight-init';
 import { getRegistryItems } from '../registry/api';
 import { buildUrlAndHeadersForRegistryItem } from '../registry/builder';
 import { configWithDefaults } from '../registry/config';
+import { clearRegistryContext } from '../registry/context';
 import { rawConfigSchema } from "../schema";
+import { createProject } from "../utils/create-project";
 import { loadEnvFiles } from '../utils/env-loader';
 import { createFileBackup, deleteFileBackup, restoreFileBackup } from '../utils/file-helper';
 import { handleError } from '../utils/handle-error';
@@ -32,7 +36,7 @@ export const initOptionsSchema = z.object({
   isNewProject: z.boolean(),
   srcDir: z.boolean().optional(),
   cssVariables: z.boolean(),
-  /* template: z
+  template: z
     .string()
     .optional()
     .refine(
@@ -45,7 +49,7 @@ export const initOptionsSchema = z.object({
       {
         message: "Invalid template. Please use 'next', 'next-16' or 'next-monorepo'.",
       }
-    ), */
+    ),
   baseColor: z
     .string()
     .optional(),
@@ -56,10 +60,10 @@ export const init = new Command()
   .name("init")
   .description("initialize your project and install dependencies")
   .argument("[components...]", "names, url or local path to component")
-  /* .option(
+  .option(
     "-t, --template <template>",
-    "the template to use. (next, next-16, next-monorepo"
-  ) */
+    "the template to use. (next, next-16, next-monorepo)"
+  )
   .option("-b, --base-color <base-color>", "The base color to use. (neutral)", undefined)
   .option("-y, --yes", "Skip de confirmation prompt", true)
   .option("-d, --defaults", "Use default configuration.", false)
@@ -161,7 +165,7 @@ export const init = new Command()
       logger.break();
       handleError(error);
     } finally {
-
+      clearRegistryContext();
     }
   })
 
@@ -174,6 +178,12 @@ export async function runInit(
   let projectInfo;
   let newProjectTemplate;
   if (!options.skipPreflight) {
-    console.log("SKIP PREFLIGHT")
+    const preflight = await preFlightInit(options);
+    if (preflight.errors[ERRORS.MISSING_DIR_OR_EMPTY_PROJECT]) {
+      const { projectPath, template } = await createProject(options);
+      if (!projectPath) {
+        process.exit(1);
+      }
+    }
   }
 }
