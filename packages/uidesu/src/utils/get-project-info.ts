@@ -1,11 +1,12 @@
 import { Framework, FRAMEWORKS } from "@/src/utils/frameworks";
-import { getConfig } from "@/src/utils/get-config";
+import { Config, getConfig, resolveConfigPaths } from "@/src/utils/get-config";
 import { getPackageInfo } from "@/src/utils/get-package-info";
 import fg from "fast-glob";
 import fs from "fs-extra";
 import path from "path";
 import { loadConfig } from "tsconfig-paths";
 import { z } from "zod";
+import { rawConfigSchema } from "../schema";
 
 export type TailwindVersion = "v3" | "v4" | null;
 
@@ -248,3 +249,67 @@ export async function isTypeScriptProject(cwd: string) {
   return files.length > 0;
 }
 
+export async function getProjectConfig(
+  cwd: string,
+  defaultProjectInfo: ProjectInfo | null = null
+): Promise<Config | null> {
+  // Check for existing component file.
+  const [existingConfig, projectInfo] = await Promise.all([
+    getConfig(cwd),
+    !defaultProjectInfo
+      ? getProjectInfo(cwd)
+      : Promise.resolve(defaultProjectInfo)
+  ]);
+
+  if (existingConfig) {
+    return existingConfig;
+  }
+
+  if(
+    !projectInfo ||
+    !projectInfo.tailwindCssFile ||
+    (projectInfo.tailwindVersion === "v3" && !projectInfo.tailwindConfigFile)
+  ) {
+    return null;
+  }
+
+  const config: z.infer<typeof rawConfigSchema> = {
+    $schema: "https://ui.shadcn.com/schema.json",
+    rsc: projectInfo.isRSC,
+    tsx: projectInfo.isTsx,
+    style: "new-york",
+    tailwind: {
+      config: projectInfo.tailwindConfigFile ?? "",
+      baseColor: "zinc",
+      css: projectInfo.tailwindCssFile,
+      cssVariables: true,
+      prefix: "",
+    },
+    iconLibrary: "lucide",
+    aliases: {
+      components: `${projectInfo.aliasPrefix}/components`,
+      ui: `${projectInfo.aliasPrefix}/components/ui`,
+      hooks: `${projectInfo.aliasPrefix}/hooks`,
+      lib: `${projectInfo.aliasPrefix}/lib`,
+      utils: `${projectInfo.aliasPrefix}/lib/utils`,
+    },
+  }
+
+  return await resolveConfigPaths(cwd, config)
+}
+
+export async function getProjectTailwindVersionFromConfig(config: {
+  resolvedPaths: Pick<Config["resolvedPaths"], "cwd">
+}): Promise<TailwindVersion> {
+  if (!config.resolvedPaths?.cwd) {
+    return "v3";
+  }
+
+  const projectInfo = await getProjectInfo(config.resolvedPaths.cwd);
+
+  if (!projectInfo?.tailwindVersion) {
+    return null;
+  }
+
+  return projectInfo.tailwindVersion;
+}

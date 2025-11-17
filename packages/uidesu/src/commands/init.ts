@@ -2,9 +2,10 @@ import * as ERRORS from "@/src/utils/errors";
 import { Command } from 'commander';
 import fsExtra from 'fs-extra';
 import path from 'path';
+import prompts from "prompts";
 import z from 'zod';
 import { preFlightInit } from '../preflights/preflight-init';
-import { getRegistryItems } from '../registry/api';
+import { getRegistryBaseColors, getRegistryItems, getRegistryStyles } from '../registry/api';
 import { buildUrlAndHeadersForRegistryItem } from '../registry/builder';
 import { configWithDefaults } from '../registry/config';
 import { clearRegistryContext } from '../registry/context';
@@ -12,6 +13,8 @@ import { rawConfigSchema } from "../schema";
 import { createProject } from "../utils/create-project";
 import { loadEnvFiles } from '../utils/env-loader';
 import { createFileBackup, deleteFileBackup, restoreFileBackup } from '../utils/file-helper';
+import { Config, getConfig } from "../utils/get-config";
+import { getProjectConfig, getProjectInfo, getProjectTailwindVersionFromConfig } from "../utils/get-project-info";
 import { handleError } from '../utils/handle-error';
 import { highlighter } from '../utils/highlighter';
 import { logger } from '../utils/logger';
@@ -184,6 +187,81 @@ export async function runInit(
       if (!projectPath) {
         process.exit(1);
       }
+      options.cwd = projectPath;
+      options.isNewProject = true;
+      newProjectTemplate = template;
     }
+    projectInfo = preflight.projectInfo;
+  } else {
+    projectInfo = await getProjectInfo(options.cwd);
   }
+
+  if (newProjectTemplate === "next-monorepo") {
+    options.cwd = path.resolve(options.cwd, "apps/web");
+    return await getConfig(options.cwd);
+  }
+
+  const projectConfig = await getProjectConfig(options.cwd, projectInfo);
+
+  let config = projectConfig
+    ? await promptForMinimalConfig(projectConfig, options)
+    : console.log("xd")
+}
+
+async function promptForMinimalConfig(
+  defaultConfig: Config,
+  opts: z.infer<typeof initOptionsSchema>
+) {
+  let style = defaultConfig.style;
+  let baseColor = opts.baseColor;
+  let cssVariables = defaultConfig.tailwind.cssVariables;
+
+  if (!opts.defaults) {
+    const [styles, baseColors, tailwindVersion] = await Promise.all([
+      getRegistryStyles(),
+      getRegistryBaseColors(),
+      getProjectTailwindVersionFromConfig(defaultConfig),
+    ]);
+
+    const options = await prompts([
+      {
+        type: tailwindVersion === "v4" ? null : "select",
+        name: "style",
+        message: `Which ${highlighter.info("style")} would you like to use?`,
+        choices: styles.map((style) => ({
+          title:
+            style.name === "aodesu" ? "aodesu (Recommended)" : style.label,
+          value: style.name,
+        })),
+        initial: 0,
+      },
+      {
+        type: opts.baseColor ? null : "select",
+        name: "tailwindBaseColor",
+        message: `Which color would you like to use as the ${highlighter.info("base color")}?`,
+        choices: baseColors.map((color) => ({
+          title: color.label,
+          value: color.name,
+        })),
+      },
+    ]);
+
+    style = options.style ?? "aodesu";
+    baseColor = options.tailwindBaseColor ?? baseColor;
+    cssVariables = opts.cssVariables;
+  }
+
+  return rawConfigSchema.parse({
+    $schema: defaultConfig?.$schema,
+    style,
+    tailwind: {
+      ...defaultConfig?.tailwind,
+      baseColor,
+      cssVariables,
+    },
+    rsc: defaultConfig?.rsc,
+    tsx: defaultConfig?.tsx,
+    iconLibrary: defaultConfig?.iconLibrary,
+    aliases: defaultConfig?.aliases,
+  });
 }

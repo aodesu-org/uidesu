@@ -4,12 +4,12 @@ import { handleError } from "../utils/handle-error";
 import { logger } from "../utils/logger";
 import { buildUrlAndHeadersForRegistryItem } from "./builder";
 import { configWithDefaults } from "./config";
-import { REGISTRY_URL } from "./constants";
+import { BASE_COLORS, REGISTRY_URL } from "./constants";
 import { clearRegistryContext, setRegistryHeaders } from "./context";
 import { RegistriesIndexParseError, RegistryInvalidNamespaceError, RegistryNotFoundError, RegistryParseError } from "./errors";
 import { fetchRegistry } from "./fetcher";
 import { fetchRegistryItems } from "./resolver";
-import { registriesIndexSchema, registryIndexSchema, registrySchema } from "./schema";
+import { registriesIndexSchema, registryIndexSchema, registrySchema, stylesSchema } from "./schema";
 import { isUrl } from "./utils";
 
 export async function getRegistry(
@@ -77,7 +77,6 @@ export async function getRegistryItems(
   return fetchRegistryItems(items, configWithDefaults(config), { useCache })
 }
 
-
 export async function getShadcnRegistryIndex() {
   try {
     const [result] = await fetchRegistry(["index.json"])
@@ -89,6 +88,21 @@ export async function getShadcnRegistryIndex() {
   }
 }
 
+export async function getRegistryStyles() {
+  try {
+    const [result] = await fetchRegistry(["styles/index.json"]);
+
+    return stylesSchema.parse(result);
+  } catch (error) {
+    logger.error("\n");
+    handleError(error);
+    return [];
+  }
+}
+
+export async function getRegistryBaseColors() {
+  return BASE_COLORS;
+}
 
 export async function getRegistriesIndex(options?: { useCache?: boolean }) {
   options = {

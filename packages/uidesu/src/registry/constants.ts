@@ -6,6 +6,13 @@ export const REGISTRY_URL =
 
 export const FALLBACK_STYLE = "aodesu";
 
+export const BASE_COLORS = [
+  {
+    name: "neutral",
+    label: "Neutral"
+  }
+]
+
 export const BUILTIN_REGISTRIES: z.infer<typeof registryConfigSchema> = {
   "@uidesu": `${REGISTRY_URL}/styles/{style}/{name}.json`,
 }
