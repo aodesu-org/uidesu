@@ -1,4 +1,6 @@
-import { PageHeader, PageHeaderHeading } from "@/components/page-header";
+import { PageActions, PageHeader, PageHeaderHeading } from "@/components/page-header";
+import { DynamicLink } from 'fumadocs-core/dynamic-link';
+
 
 const title = "The foundation for your Design System";
 
@@ -8,6 +10,9 @@ export default function IndexPage() {
       <PageHeader>
         <PageHeaderHeading className="max-w-4xl">{title}</PageHeaderHeading>
       </PageHeader>
+      <PageActions>
+        <DynamicLink href="/[lang]/components">View Components</DynamicLink>
+      </PageActions>
     </div>
   )
 }

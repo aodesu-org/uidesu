@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 4000",
+    "build:next": "next build",
     "build": "pnpm --filter=aodesu build && next build",
     "start": "next start --port 4000",
     "lint": "eslint .",
@@ -14,12 +15,19 @@
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.11",
     "clsx": "^2.1.1",
+    "front-matter": "^4.0.2",
+    "fumadocs-core": "16.0.5",
+    "fumadocs-docgen": "2.0.0",
+    "fumadocs-mdx": "13.0.2",
+    "fumadocs-ui": "16.0.5",
     "next": "16.0.3",
     "next-themes": "0.4.6",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "rehype-pretty-code": "^0.14.1",
     "uidesu": "workspace:^",
     "rimraf": "^6.0.1",
+    "shiki": "^1.10.1",
     "tailwind-merge": "^3.0.1",
     "ts-morph": "18.0.0",
     "zod": "^3.25.76"
