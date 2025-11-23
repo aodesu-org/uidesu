@@ -1,17 +1,20 @@
-"use client";
+"use client"
 
-import { Locale, translations } from "@/lib/translations";
-import { usePathname } from "next/navigation";
+import { usePathname } from "next/navigation"
 
-const supportedLocales = ['es', 'en'];
-const defaultLocale = 'es';
+import { Locale, translations } from "@/lib/translations"
 
-export function useTranslations(): typeof translations[Locale] {
-  const pathname = usePathname();
+const supportedLocales = ["es", "en"]
+const defaultLocale = "es"
 
-  const locale = pathname.split('/')[1] || defaultLocale;
+export function useTranslations(): (typeof translations)[Locale] {
+  const pathname = usePathname()
 
-  const currentLocale = supportedLocales.includes(locale) ? locale : defaultLocale;
+  const locale = pathname.split("/")[1] || defaultLocale
 
-  return translations[currentLocale as Locale];
+  const currentLocale = supportedLocales.includes(locale)
+    ? locale
+    : defaultLocale
+
+  return translations[currentLocale as Locale]
 }

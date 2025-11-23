@@ -1,18 +1,18 @@
-import { Language } from ".";
+import { Language } from "."
 
 export const en = {
   langs: {
     en: "English",
-    es: "Spanish"
+    es: "Spanish",
   },
   languageAlert: {
     title: "Notice",
     message: (currentLang: Language, availableLang: Language) =>
-      `This page is not available in ${en.langs[currentLang]}, but we're showing it in ${en.langs[availableLang]}.`
+      `This page is not available in ${en.langs[currentLang]}, but we're showing it in ${en.langs[availableLang]}.`,
   },
   navigation: {
     previous: "Previous",
-    next: "Next"
+    next: "Next",
   },
-  copyPage: 'Copy page'
-} as const;
+  copyPage: "Copy page",
+} as const

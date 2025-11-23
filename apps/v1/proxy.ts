@@ -1,11 +1,10 @@
 // proxy.ts
-import { i18n } from '@/lib/i18n';
-import { createI18nMiddleware } from 'fumadocs-core/i18n/middleware';
+import { createI18nMiddleware } from "fumadocs-core/i18n/middleware"
 
-export default createI18nMiddleware(i18n);
+import { i18n } from "@/lib/i18n"
+
+export default createI18nMiddleware(i18n)
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
-  ],
-};
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|public).*)"],
+}

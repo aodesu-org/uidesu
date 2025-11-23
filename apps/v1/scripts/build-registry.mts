@@ -1,11 +1,12 @@
-import { exec, execFile } from "child_process";
-import { existsSync, promises as fs } from "fs";
-import path from "path";
-import { rimraf } from "rimraf";
-import { registrySchema } from "uidesu/schema";
+import { exec, execFile } from "child_process"
+import { existsSync, promises as fs } from "fs"
+import path from "path"
+import { rimraf } from "rimraf"
+import { registrySchema } from "uidesu/schema"
 
-import { getAllBlocks } from "@/lib/blocks";
-import { STYLES, type Style } from "@/registry/styles";
+import { getAllBlocks } from "@/lib/blocks"
+import { STYLES, type Style } from "@/registry/styles"
+
 
 async function buildRegistryIndex(styles: Style[]) {
   let index = `/* eslint-disable @typescript-eslint/ban-ts-comment */
@@ -150,22 +151,22 @@ async function buildRegistryJsonFile(styleName: string) {
     });
   })
 
-  // 5. Write temporary registry file needed by aodesu build.
+  // 5. Write temporary registry file needed by uidesu build.
   const tempRegistryPath = path.join(process.cwd(), `registry-${styleName}.json`)
   await fs.writeFile(tempRegistryPath, JSON.stringify(fixedRegistry, null, 2))
 }
 
 async function buildRegistry(styleName: string) {
   return new Promise((resolve, reject) => {
-    // Use local aodesu copy.
+    // Use local uidesu copy.
     const outputPath =
       styleName === "aodesu" ? `public/r/styles/${styleName}` : `public/r/${styleName}`
     const process = exec(
-      `node ../../packages/aodesu/dist/index.js build registry-${styleName}.json --output ${outputPath}`
+      `node ../../packages/uidesu/dist/index.js build registry-${styleName}.json --output ${outputPath}`
     )
 
     // exec(
-    //   `pnpm dlx aodesu build registry-${styleName}.json --output public/r/styles/${styleName}`
+    //   `pnpm dlx uidesu build registry-${styleName}.json --output public/r/styles/${styleName}`
     // )
 
     process.on("exit", (code) => {

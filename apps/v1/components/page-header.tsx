@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 function PageHeader({
   className,
@@ -8,7 +8,7 @@ function PageHeader({
   return (
     <section className={cn("border-grid", className)} {...props}>
       <div className="container-wrapper">
-        <div className="container flex flex-col items-center gap-2 py8 text-center md:py-16 lg:py-20 xl:gap-4">
+        <div className="py8 container flex flex-col items-center gap-2 text-center md:py-16 lg:py-20 xl:gap-4">
           {children}
         </div>
       </div>
@@ -46,7 +46,7 @@ function PageHeaderDescription({
   )
 }
 
-function PageActions({ className, ...props}: React.ComponentProps<"div">) {
+function PageActions({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
@@ -58,4 +58,4 @@ function PageActions({ className, ...props}: React.ComponentProps<"div">) {
   )
 }
 
-export { PageActions, PageHeader, PageHeaderDescription, PageHeaderHeading };
+export { PageActions, PageHeader, PageHeaderDescription, PageHeaderHeading }

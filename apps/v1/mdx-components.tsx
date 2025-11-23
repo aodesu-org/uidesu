@@ -1,8 +1,11 @@
-import { cn } from "@/lib/utils";
-import React from "react";
-import { CodeBlockCommand } from "./components/code-block-command";
-import { CodeTabs } from "./components/code-tabs";
-import { TabsContent, TabsList, TabsTrigger } from "./registry/aodesu/ui/tabs";
+import React from "react"
+
+import { cn } from "@/lib/utils"
+
+import { CodeBlockCommand } from "./components/code-block-command"
+import { CodeTabs } from "./components/code-tabs"
+import { ComponentPreview } from "./components/component-preview"
+import { TabsContent, TabsList, TabsTrigger } from "./registry/aodesu/ui/tabs"
 
 export const mdxComponents = {
   h1: ({ className, ...props }: React.ComponentProps<"h1">) => (
@@ -18,17 +21,16 @@ export const mdxComponents = {
     <h2
       id={props.children
         ?.toString()
-        .replace(/ /g, '-')
+        .replace(/ /g, "-")
         .replace(/'/g, "")
         .replace(/\?/g, "")
-        .toLowerCase()
-      }
+        .toLowerCase()}
       className={cn(
         "font-heading [&+]*:[code]:text-xl mt-10 scroll-m-28 text-xl font-medium tracking-tight first:mt-0 lg:mt-16 [&+.steps]:mt-0! [&+.steps>h3]:mt-4! [&+h3]:mt-6! [&+p]:mt-4!",
         className
       )}
       {...props}
-      />
+    />
   ),
   h3: ({ className, ...props }: React.ComponentProps<"h3">) => (
     <h3
@@ -73,14 +75,10 @@ export const mdxComponents = {
     />
   ),
   p: ({ className, ...props }: React.ComponentProps<"p">) => (
-    <p
-      className={cn("leading-relaxed not-first:mt-6", className)}
-      {...props}
-    />
+    <p className={cn("leading-relaxed not-first:mt-6", className)} {...props} />
   ),
   blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (
-    <blockquote
-    />
+    <blockquote />
   ),
   code: ({
     className,
@@ -92,15 +90,21 @@ export const mdxComponents = {
     __bun__,
     ...props
   }: React.ComponentProps<"code"> & {
-    __raw__?: string;
-    __src__?: string;
-    __npm__?: string;
-    __yarn__?: string;
-    __pnpm__?: string;
-    __bun__?: string;
+    __raw__?: string
+    __src__?: string
+    __npm__?: string
+    __yarn__?: string
+    __pnpm__?: string
+    __bun__?: string
   }) => {
     // Si es un código inline (sin props especiales)
-    if (typeof props.children === "string" && !__npm__ && !__yarn__ && !__pnpm__ && !__bun__) {
+    if (
+      typeof props.children === "string" &&
+      !__npm__ &&
+      !__yarn__ &&
+      !__pnpm__ &&
+      !__bun__
+    ) {
       return (
         <code
           className={cn(
@@ -112,7 +116,7 @@ export const mdxComponents = {
     }
 
     // Si tiene props de package managers
-    const isNpmCommand = __npm__ || __yarn__ || __pnpm__ || __bun__;
+    const isNpmCommand = __npm__ || __yarn__ || __pnpm__ || __bun__
     if (isNpmCommand) {
       return (
         <CodeBlockCommand
@@ -136,10 +140,7 @@ export const mdxComponents = {
     className,
     ...props
   }: React.ComponentProps<typeof TabsList>) => (
-    <TabsList
-      className={cn("", className)}
-      {...props}
-    />
+    <TabsList className={cn("", className)} {...props} />
   ),
   TabsTrigger: ({
     className,
@@ -165,5 +166,6 @@ export const mdxComponents = {
       {...props}
     />
   ),
-  CodeTabs
+  CodeTabs,
+  ComponentPreview,
 }

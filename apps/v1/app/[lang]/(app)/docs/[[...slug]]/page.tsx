@@ -1,76 +1,79 @@
-import { DocsCopyPage } from "@/components/docs-copy-page";
-import LanguageAlternativeAlert from "@/components/language-alternative-alert";
-import { source } from "@/lib/source";
-import { absoluteUrl, getLocalizedUrl } from "@/lib/utils";
-import { mdxComponents } from "@/mdx-components";
-import fm from "front-matter";
-import { findNeighbour } from "fumadocs-core/page-tree";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import z from "zod";
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { mdxComponents } from "@/mdx-components"
+import fm from "front-matter"
+import { findNeighbour } from "fumadocs-core/page-tree"
+import z from "zod"
 
+import { source } from "@/lib/source"
+import { absoluteUrl, getLocalizedUrl } from "@/lib/utils"
+import { DocsCopyPage } from "@/components/docs-copy-page"
+import LanguageAlternativeAlert from "@/components/language-alternative-alert"
 
 export function generateStaticParams() {
-  return source.generateParams();
+  return source.generateParams()
 }
 
 export default async function Page(props: {
-  params: Promise<{ slug?: string[], lang: string }>
+  params: Promise<{ slug?: string[]; lang: string }>
 }) {
-  const { slug, lang: requestedLang } = await props.params;
+  const { slug, lang: requestedLang } = await props.params
 
-  console.log("Params:", { slug, lang: requestedLang });
-  console.log("Available languages:", Object.keys(source.pageTree));
+  console.log("Params:", { slug, lang: requestedLang })
+  console.log("Available languages:", Object.keys(source.pageTree))
 
-  let page = source.getPage(slug, requestedLang);
-  let alternativePage: typeof page | null = null;
-  let alternativeLang = '';
-  let usingAlternativeLanguage = false;
+  let page = source.getPage(slug, requestedLang)
+  let alternativePage: typeof page | null = null
+  let alternativeLang = ""
+  let usingAlternativeLanguage = false
 
-  console.log("Found page:", page);
+  console.log("Found page:", page)
 
   // Si la página no se encuentra en el idioma solicitado, buscar en otros idiomas
   if (!page) {
-    console.log("Page not found for:", { slug, lang: requestedLang });
+    console.log("Page not found for:", { slug, lang: requestedLang })
 
     // Buscar en otros idiomas
-    const availableLanguages = Object.keys(source.pageTree);
+    const availableLanguages = Object.keys(source.pageTree)
 
     for (const otherLang of availableLanguages) {
       if (otherLang !== requestedLang) {
-        const foundPage = source.getPage(slug, otherLang);
+        const foundPage = source.getPage(slug, otherLang)
         if (foundPage) {
-          alternativePage = foundPage;
-          alternativeLang = otherLang;
-          usingAlternativeLanguage = true;
-          console.log(`Found page in alternative language: ${otherLang}`, foundPage);
-          break;
+          alternativePage = foundPage
+          alternativeLang = otherLang
+          usingAlternativeLanguage = true
+          console.log(
+            `Found page in alternative language: ${otherLang}`,
+            foundPage
+          )
+          break
         }
       }
     }
 
     // Si no se encontró en ningún idioma
     if (!alternativePage) {
-      notFound();
+      notFound()
     }
 
     // Usar la página del idioma alternativo
-    page = alternativePage;
+    page = alternativePage
   }
 
-  const doc = page.data;
-  const MDX = doc.body;
+  const doc = page.data
+  const MDX = doc.body
 
   // Usar el tree del idioma de la página encontrada (puede ser diferente al solicitado)
-  const pageLang = usingAlternativeLanguage ? alternativeLang : requestedLang;
-  const localizedTree = source.pageTree[pageLang];
-  const neighbours = findNeighbour(localizedTree, page.url);
+  const pageLang = usingAlternativeLanguage ? alternativeLang : requestedLang
+  const localizedTree = source.pageTree[pageLang]
+  const neighbours = findNeighbour(localizedTree, page.url)
 
-  console.log("Using page from language:", pageLang);
-  console.log("Neighbours:", neighbours);
+  console.log("Using page from language:", pageLang)
+  console.log("Neighbours:", neighbours)
 
-  const raw = await page.data.getText("raw");
-  const { attributes } = fm(raw);
+  const raw = await page.data.getText("raw")
+  const { attributes } = fm(raw)
   const { links } = z
     .object({
       links: z
@@ -80,7 +83,7 @@ export default async function Page(props: {
         })
         .optional(),
     })
-    .parse(attributes);
+    .parse(attributes)
 
   return (
     <div className="flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full">
@@ -104,29 +107,34 @@ export default async function Page(props: {
                 <div>
                   <DocsCopyPage page={raw} url={absoluteUrl(page.url)} />
                   {neighbours.previous && (
-                    <Link href={getLocalizedUrl(neighbours.previous.url, requestedLang)}>
+                    <Link
+                      href={getLocalizedUrl(
+                        neighbours.previous.url,
+                        requestedLang
+                      )}
+                    >
                       {neighbours.previous.name}
                     </Link>
                   )}
                   {neighbours.next && (
-                    <Link href={getLocalizedUrl(neighbours.next.url, requestedLang)}>
+                    <Link
+                      href={getLocalizedUrl(neighbours.next.url, requestedLang)}
+                    >
                       {neighbours.next.name}
                     </Link>
                   )}
                 </div>
               </div>
               {doc.description && (
-                <p className="text-muted-foreground text-[1.05rem] text-balance sm:text-base">{doc.description}</p>
+                <p className="text-muted-foreground text-[1.05rem] text-balance sm:text-base">
+                  {doc.description}
+                </p>
               )}
             </div>
             {links ? (
               <div className="flex items-center gap-2 pt-4">
-                {links?.doc && (
-                  <div>Docs</div>
-                )}
-                {links?.api && (
-                  <div>API</div>
-                )}
+                {links?.doc && <div>Docs</div>}
+                {links?.api && <div>API</div>}
               </div>
             ) : null}
           </div>
@@ -137,11 +145,11 @@ export default async function Page(props: {
 
           {/* Aquí podrías agregar la navegación entre páginas si lo deseas */}
           {neighbours && (neighbours.previous || neighbours.next) && (
-            <div className="flex flex-col gap-4 sm:flex-row sm:justify-between mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+            <div className="mt-8 flex flex-col gap-4 border-t border-gray-200 pt-8 sm:flex-row sm:justify-between dark:border-gray-800">
               {neighbours.previous && (
                 <a
                   href={neighbours.previous.url}
-                  className="flex flex-col gap-1 sm:max-w-[45%] p-4 rounded-lg border border-gray-200 hover:border-gray-300 dark:border-gray-800 dark:hover:border-gray-700 transition-colors"
+                  className="flex flex-col gap-1 rounded-lg border border-gray-200 p-4 transition-colors hover:border-gray-300 sm:max-w-[45%] dark:border-gray-800 dark:hover:border-gray-700"
                 >
                   <span className="text-sm text-gray-600 dark:text-gray-400">
                     Anterior
@@ -154,7 +162,7 @@ export default async function Page(props: {
               {neighbours.next && (
                 <a
                   href={neighbours.next.url}
-                  className="flex flex-col gap-1 sm:max-w-[45%] p-4 rounded-lg border border-gray-200 hover:border-gray-300 dark:border-gray-800 dark:hover:border-gray-700 transition-colors ml-auto text-right"
+                  className="ml-auto flex flex-col gap-1 rounded-lg border border-gray-200 p-4 text-right transition-colors hover:border-gray-300 sm:max-w-[45%] dark:border-gray-800 dark:hover:border-gray-700"
                 >
                   <span className="text-sm text-gray-600 dark:text-gray-400">
                     Siguiente

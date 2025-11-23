@@ -1,6 +1,4 @@
-export const STYLES = [
-  { name: "new-york-v4" as const, title: "New York" },
-] as const
+export const STYLES = [{ name: "aodesu" as const, title: "aodesu" }] as const
 
 export type Style = (typeof STYLES)[number]
 

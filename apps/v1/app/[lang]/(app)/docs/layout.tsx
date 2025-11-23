@@ -1,17 +1,16 @@
-import React from "react";
-
+import React from "react"
 
 export default async function Layout({
   params,
   children,
 }: {
-  params: Promise<{ lang: string }>;
-  children: React.ReactNode;
+  params: Promise<{ lang: string }>
+  children: React.ReactNode
 }) {
-  const { lang } = await params;
+  const { lang } = await params
   return (
-      <div className="container-wrapper flex flex-1 flex-col px-2">
-        {children}
-      </div>
+    <div className="container-wrapper flex flex-1 flex-col px-2">
+      {children}
+    </div>
   )
 }

@@ -1,5 +1,3 @@
 export function AvatarDemo() {
-  return (
-    <div>HOLA</div>
-  )
+  return <div>HOLA</div>
 }
