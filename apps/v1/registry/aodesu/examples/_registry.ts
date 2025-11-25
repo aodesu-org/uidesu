@@ -7,7 +7,7 @@ export const examples: Registry["items"] = [
     registryDependencies: ["avatar"],
     files: [
       {
-        path: "examples/avatar-demo.tsx",
+        path: "examples/avatar/avatar-demo.tsx",
         type: "registry:example",
       },
     ],

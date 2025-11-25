@@ -29,6 +29,7 @@ export function ComponentPreview({
   type?: "block" | "component" | "example"
   chromeLessOnMobile?: boolean
 }) {
+  console.log(Index);
   const Component = Index[styleName]?.[name]?.component;
 
   if (!Component) {

@@ -52,7 +52,7 @@
       ],
       "files": [
         {
-          "path": "registry/aodesu/examples/avatar-demo.tsx",
+          "path": "registry/aodesu/examples/avatar/avatar-demo.tsx",
           "type": "registry:example"
         }
       ]

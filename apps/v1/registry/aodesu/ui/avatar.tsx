@@ -1,8 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
+import { ComponentPropsWithoutRef } from 'react';
 
-import { cn } from "@/lib/utils"
+
+
+import { cn } from "@/lib/utils";
+
+
+
+
 
 interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -23,25 +30,26 @@ function getInitials(name: string | undefined | null): string {
   return (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
 }
 
-export default function Avatar({
-  containerClassName,
-  imageClassName,
-  fallbackClassName,
-  alt,
-  src,
-}: {
-  containerClassName?: string
-  imageClassName?: string
-  fallbackClassName?: string
+interface AvatarProps {
+  className?: string
+  imageProps?: ComponentPropsWithoutRef<"img">
+  fallbackProps?: ComponentPropsWithoutRef<"div">
   alt?: string
   src?: string
-}) {
+}
+
+export default function Avatar({
+  className,
+  imageProps,
+  fallbackProps,
+  alt,
+  src,
+  ...props
+}: AvatarProps & ComponentPropsWithoutRef<"div">) {
   return (
-    <AvatarContainer className={containerClassName}>
-      <AvatarImage src={src} alt={alt} className={imageClassName} />
-      <AvatarFallback className={fallbackClassName}>
-        {getInitials(alt)}
-      </AvatarFallback>
+    <AvatarContainer className={className} {...props}>
+      <AvatarImage src={src} alt={alt} {...imageProps} />
+      <AvatarFallback {...fallbackProps}>{getInitials(alt)}</AvatarFallback>
     </AvatarContainer>
   )
 }
@@ -131,4 +139,4 @@ function AvatarFallback({
   )
 }
 
-export { AvatarContainer, AvatarFallback, AvatarImage }
+export { AvatarContainer, AvatarFallback, AvatarImage };
