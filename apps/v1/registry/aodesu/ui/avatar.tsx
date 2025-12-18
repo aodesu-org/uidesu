@@ -1,15 +1,9 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { ComponentPropsWithoutRef } from 'react';
+import * as React from "react"
+import { ComponentPropsWithoutRef } from "react"
 
-
-
-import { cn } from "@/lib/utils";
-
-
-
-
+import { cn } from "@/lib/utils"
 
 interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -139,4 +133,4 @@ function AvatarFallback({
   )
 }
 
-export { AvatarContainer, AvatarFallback, AvatarImage };
+export { AvatarContainer, AvatarFallback, AvatarImage }

@@ -97,7 +97,6 @@ export const mdxComponents = {
     __pnpm__?: string
     __bun__?: string
   }) => {
-    // Si es un código inline (sin props especiales)
     if (
       typeof props.children === "string" &&
       !__npm__ &&

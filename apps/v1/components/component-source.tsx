@@ -1,17 +1,12 @@
-import fs from "node:fs/promises";
-import path from "node:path";
-import * as React from "react";
+import fs from "node:fs/promises"
+import path from "node:path"
+import * as React from "react"
 
-
-
-import { highlightCode } from "@/lib/highlight-code";
-import { getRegistryItem } from "@/lib/registry";
-import { cn } from "@/lib/utils";
-import { Style } from "@/registry/styles";
-
-
-
-
+import { highlightCode } from "@/lib/highlight-code"
+import { getRegistryItem } from "@/lib/registry"
+import { cn } from "@/lib/utils"
+import { Button } from "@/registry/aodesu/ui/button"
+import { Style } from "@/registry/styles"
 
 export async function ComponentSource({
   name,
@@ -51,7 +46,7 @@ export async function ComponentSource({
 
   // Fix imports.
   // Replace @/registry/${style}/ with @/components/.
-  code = code.replaceAll(`@/registry/${styleName}/`, "@/components/");
+  code = code.replaceAll(`@/registry/${styleName}/`, "@/components/")
 
   // Replace export default with export.
   code = code.replaceAll("export default", "export")
@@ -99,7 +94,7 @@ function ComponentCode({
           {title}
         </figcaption>
       )}
-      <button>Copiar</button>
+      <Button>Copiar</Button>
       <div dangerouslySetInnerHTML={{ __html: highlightedCode }}></div>
     </figure>
   )
