@@ -133,6 +133,7 @@ function TabsTrigger({
 
   return (
     <Button
+    <Button
       data-slot="tabs-trigger"
       role="tab"
       aria-selected={isSelected}
@@ -150,6 +151,7 @@ function TabsTrigger({
       {...props}
     >
       {children}
+    </Button>
     </Button>
   )
 }

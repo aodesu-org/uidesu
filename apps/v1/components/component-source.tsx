@@ -53,7 +53,7 @@ export async function ComponentSource({
 
   // Fix imports.
   // Replace @/registry/${style}/ with @/components/.
-  code = code.replaceAll(`@/registry/${styleName}/`, "@/components/");
+  code = code.replaceAll(`@/registry/${styleName}/`, "@/components/")
 
   // Replace export default with export.
   code = code.replaceAll("export default", "export")
