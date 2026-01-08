@@ -1,11 +1,17 @@
-import React from "react"
+import React from "react";
 
-import { cn } from "@/lib/utils"
 
-import { CodeBlockCommand } from "./components/code-block-command"
-import { CodeTabs } from "./components/code-tabs"
-import { ComponentPreview } from "./components/component-preview"
-import { TabsContent, TabsList, TabsTrigger } from "./registry/aodesu/ui/tabs"
+
+import { cn } from "@/lib/utils";
+
+
+
+import { CodeBlockCommand } from "./components/code-block-command";
+import { CodeTabs } from "./components/code-tabs";
+import { ComponentPreview } from "./components/component-preview";
+import { Button } from "./registry/aodesu/ui/button";
+import { TabsContent, TabsList, TabsTrigger } from "./registry/aodesu/ui/tabs";
+
 
 export const mdxComponents = {
   h1: ({ className, ...props }: React.ComponentProps<"h1">) => (
@@ -131,7 +137,7 @@ export const mdxComponents = {
     // Para otros casos de código block
     return (
       <>
-        {__raw__ && <button>Copiar</button>}
+        {__raw__ && <Button>Copiar</Button>}
         <code {...props} />
       </>
     )
@@ -148,7 +154,8 @@ export const mdxComponents = {
   }: React.ComponentProps<typeof TabsTrigger>) => (
     <TabsTrigger
       className={cn(
-        "text-muted-foreground data-[state=active]:text-foreground data-[state=active]:border-primary dark:data-[state=active]:border-primary hover:text-primary rounded-none border-0 border-b-2 border-transparent bg-transparent px-0 pb-3 text-base data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent",
+        "text-muted-foreground relative border-b-2 border-transparent text-base",
+
         className
       )}
       {...props}
@@ -160,7 +167,7 @@ export const mdxComponents = {
   }: React.ComponentProps<typeof TabsContent>) => (
     <TabsContent
       className={cn(
-        "relative [&_h3.font-heading]:text-base [&_h3.font-heading]:font-medium *:[figure]:first:mt-0 [&>.steps]:mt-6",
+        "*:[figure]:first:mt-0&>.steps]:mt-6 *:[figure]:firsst:mt-0 relative [&_h3.font-heading]:text-base [&_h3.font-heading]:font-medium *:[figure]:first:mt-0 *:[figure]:first:border *:[figure]:first:border-[hsl(var(--border))]",
         className
       )}
       {...props}

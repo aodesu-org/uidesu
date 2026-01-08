@@ -1,14 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { useConfig } from "@/hooks/use-config"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/registry/aodesu/ui/tabs"
+
+
+import { useConfig } from "@/hooks/use-config";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/registry/aodesu/ui/tabs";
+
+
+
+
 
 export function CodeBlockCommand({
   __npm__,
@@ -59,15 +60,11 @@ export function CodeBlockCommand({
           })
         }}
       >
-        <div className="border-border/50 flex items-center gap-2 border-b px-4 py-1">
+        <div className="flex items-center gap-2 border-b border-[hsl(var(--border))] p-2">
           <TabsList className="rounded-none bg-transparent p-0">
             {Object.entries(tabs).map(([key]) => {
               return (
-                <TabsTrigger
-                  key={key}
-                  value={key}
-                  className="data-[state=active]:bg-accent data-[state=active]:border-input h-7 border border-transparent pt-0.5 data-[state=active]:shadow-none"
-                >
+                <TabsTrigger key={key} value={key}>
                   {key}
                 </TabsTrigger>
               )

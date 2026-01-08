@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Charm:wght@400;700&display=swap');
+
+[data-style="aodesu"],
+[data-style="aodesu"][data-theme="dark"] {
+  --font-branch: "Charm", cursive;
+
+  --background: 0 0% 4%;
+  --background-elevated-1: 0 0% 5%;
+  --background-elevated-2: 0 0% 8.5%;
+  --foreground: 0 0% 80%;
+  --foreground-light: 0 0% 100%;
+  --inverse-foreground: 0 0% 10%;
+
+  --sandbox-bg: 0 0% 3%;
+
+  --neutral: 0 0% 20%;
+  --neutral-dark: 0 0% 14%;
+  --neutral-light: 0 0% 27%;
+
+  --primary: 225 72% 57%;
+  --primary-dark: 225 55% 45%;
+  --primary-light: 225 68% 61%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 258 72% 61%;
+  --secondary-dark: 258 45% 49%;
+  --secondary-light: 258 72% 68%;
+  --secondary-foreground: 0 0% 100%;
+
+  --contrast: 0 0% 80%;
+  --contrast-light: 0 0% 95%;
+  --contrast-dark: 0 0% 70%;
+
+  --border: 0 0% 15%;
+  --border-outline: 0 0% 20%;
+
+  --popover: 0 0% 15%;
+  --popover-foreground: 0 0% 90%;
+}

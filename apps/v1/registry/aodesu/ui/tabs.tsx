@@ -1,8 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+
+
+import { cn } from "@/lib/utils";
+
+
+
+import { Button } from "./button";
+
 
 interface TabsContextValue {
   value: string
@@ -35,7 +42,6 @@ function Tabs({
   defaultValue,
   ...props
 }: TabsProps) {
-  // Si no se controla externamente, manejar estado interno
   const [internalValue, setInternalValue] = React.useState(defaultValue || "")
 
   const isControlled = value !== undefined
@@ -83,7 +89,7 @@ function TabsList({ className, children, ...props }: TabsListProps) {
       data-slot="tabs-list"
       role="tablist"
       className={cn(
-        "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
+        "flex gap-2",
         className
       )}
       {...props}
@@ -126,25 +132,25 @@ function TabsTrigger({
   }
 
   return (
-    <button
+    <Button
       data-slot="tabs-trigger"
       role="tab"
       aria-selected={isSelected}
       aria-controls={`tab-content-${value}`}
       tabIndex={isSelected ? 0 : -1}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
       disabled={disabled}
+      variant={isSelected ? "contained" : "ghost"}
+      size="small"
+      onClick={() => {
+        if (!disabled) onValueChange(value)
+      }}
       className={cn(
-        "data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        isSelected &&
-          "data-[state=active]:bg-background dark:data-[state=active]:text-foreground data-[state=active]:shadow-sm",
         className
       )}
       {...props}
     >
       {children}
-    </button>
+    </Button>
   )
 }
 
@@ -208,4 +214,4 @@ function SimpleTabs({
   )
 }
 
-export { SimpleTabs, Tabs, TabsContent, TabsList, TabsTrigger }
+export { SimpleTabs, Tabs, TabsContent, TabsList, TabsTrigger };

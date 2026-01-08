@@ -1,15 +1,27 @@
-import { META_THEME_COLORS } from "@/lib/config"
-import { i18n } from "@/lib/i18n"
-import { LayoutProvider } from "@/hooks/use-layout"
-import LanguageSwitcher from "@/components/language-switcher"
-import { ThemeProvider } from "@/components/theme-provider"
+import LanguageSwitcher from "@/components/language-switcher";
+import { ThemeProvider } from "@/components/theme-provider";
+import { LayoutProvider } from "@/hooks/use-layout";
+import { META_THEME_COLORS } from "@/lib/config";
+import { i18n } from "@/lib/i18n";
 
-import "@/styles/globals.css"
 
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import { defineI18nUI } from "fumadocs-ui/i18n"
-import { RootProvider } from "fumadocs-ui/provider/next"
+
+
+
+
+import "@/registry/aodesu/themes/dark.css";
+import "@/styles/globals.css";
+
+
+
+import { defineI18nUI } from "fumadocs-ui/i18n";
+import { RootProvider } from "fumadocs-ui/provider/next";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+
+
+
+
 
 const { provider } = defineI18nUI(i18n, {
   translations: {
@@ -47,7 +59,13 @@ export default async function RootLayout({
   const lang = (await params).lang
 
   return (
-    <html lang={lang} suppressHydrationWarning>
+    <html
+      lang={lang}
+      suppressHydrationWarning
+      data-theme="dark"
+      data-style="aodesu"
+      className="bg-[hsl(var(--primary-background))]"
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{

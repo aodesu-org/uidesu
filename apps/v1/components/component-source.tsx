@@ -1,3 +1,4 @@
+import { Copy, Send } from 'lucide-react';
 import fs from "node:fs/promises";
 import path from "node:path";
 import * as React from "react";
@@ -7,6 +8,7 @@ import * as React from "react";
 import { highlightCode } from "@/lib/highlight-code";
 import { getRegistryItem } from "@/lib/registry";
 import { cn } from "@/lib/utils";
+import { Button } from "@/registry/aodesu/ui/button";
 import { Style } from "@/registry/styles";
 
 
@@ -99,7 +101,14 @@ function ComponentCode({
           {title}
         </figcaption>
       )}
-      <button>Copiar</button>
+      <div className="flex w-full justify-end p-2">
+        <Button size="small">
+          <Send />
+        </Button>
+        <Button size="small">
+          <Copy />
+        </Button>
+      </div>
       <div dangerouslySetInnerHTML={{ __html: highlightedCode }}></div>
     </figure>
   )

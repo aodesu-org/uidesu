@@ -22,7 +22,7 @@ export function ComponentPreviewTabs({
   return (
     <div
       className={cn(
-        "group relative mt-4 mb-12 flex flex-col gap-2 rounded-lg border",
+        "group relative mt-4 mb-12 flex flex-col gap-2 rounded-lg border border-[hsl(var(--border))]",
         className
       )}
       {...props}
@@ -32,7 +32,7 @@ export function ComponentPreviewTabs({
           data-align={align}
           className={cn(
             "preview flex w-full justify-center data-[align=center]:items-center data-[align=end]:items-end data-[align=start]:items-start",
-            chromeLessOnMobile ? "sm:p-10" : "min-h-[100px] max-h-[450px] p-10"
+            chromeLessOnMobile ? "sm:p-10" : "max-h-[450px] min-h-[100px] p-10"
           )}
         >
           {component}
@@ -40,7 +40,7 @@ export function ComponentPreviewTabs({
         {!hideCode && (
           <div
             data-slot="code"
-            className="overflow-hidden **:data-rehype-pretty-code-figure:m-0! **:data-rehype-pretty-code-figure:rounded-t-none **:data-rehype-pretty-code-figure:border-t [&_pre]:max-h-[400px]"
+            className="overflow-hidden **:data-rehype-pretty-code-figure:m-0! **:data-rehype-pretty-code-figure:rounded-t-none **:data-rehype-pretty-code-figure:border-t **:data-rehype-pretty-code-figure:border-[hsl(var(--border))] [&_pre]:max-h-[400px]"
           >
             {source}
           </div>
