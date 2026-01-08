@@ -1,3 +1,4 @@
+import { AtSign, Copy, Send } from "lucide-react";
 import React from "react";
 
 
@@ -135,10 +136,22 @@ export const mdxComponents = {
 
     // Para otros casos de código block
     return (
-      <>
-        {__raw__ && <Button>Copiar</Button>}
+      <div className="overflow-hidden rounded-lg border border-[hsl(var(--border))]">
+        {__raw__ && (
+          <div className="flex justify-end p-2">
+            <Button size="small" title='Enviar por correo'>
+              <AtSign />
+            </Button>
+            <Button size="small" title='Compartir'>
+              <Send />
+            </Button>
+            <Button size="small" title='Copiar'>
+              <Copy />
+            </Button>
+          </div>
+        )}
         <code {...props} />
-      </>
+      </div>
     )
   },
   TabsList: ({

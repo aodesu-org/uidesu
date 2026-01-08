@@ -1,4 +1,4 @@
-import { Copy, Send } from 'lucide-react';
+import { AtSign, Copy, Send } from 'lucide-react';
 import fs from "node:fs/promises";
 import path from "node:path";
 import * as React from "react";
@@ -102,10 +102,13 @@ function ComponentCode({
         </figcaption>
       )}
       <div className="flex w-full justify-end p-2">
-        <Button size="small">
+        <Button size="small" title='Enviar por correo'>
+          <AtSign />
+        </Button>
+        <Button size="small" title='Compartir'>
           <Send />
         </Button>
-        <Button size="small">
+        <Button size="small" title='Copiar'>
           <Copy />
         </Button>
       </div>
