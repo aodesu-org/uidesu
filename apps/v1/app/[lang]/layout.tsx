@@ -84,7 +84,7 @@ export default async function RootLayout({
         <meta name="theme-color" content={META_THEME_COLORS.dark} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[hsl(var(--background))] text-[hsl(var(--foreground))]`}
       >
         <RootProvider i18n={provider(lang)}>
           <ThemeProvider>

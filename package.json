@@ -14,12 +14,16 @@
   ],
   "scripts": {
     "dev": "turbo run dev --parallel",
+    "registry:build": "pnpm --filter=v1 registry:build && pnpm lint:fix && pnpm format:write -- --loglevel silent",
     "uidesu:dev": "turbo --filter=uidesu dev",
     "uidesu": "pnpm --filter=uidesu start:dev"
   },
   "packageManager": "pnpm@10.16.1",
   "dependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
     "cross-env": "^7.0.3",
+    "eslint-config-prettier": "^8.8.0",
+    "prettier": "^2.8.8",
     "puppeteer": "^23.6.0",
     "tailwindcss": "^3.4.18",
     "tsx": "^4.1.4",

@@ -13,6 +13,7 @@ import { ComponentSource } from "./component-source";
 
 export function ComponentPreview({
   name,
+  title,
   styleName = "aodesu",
   type,
   className,
@@ -22,6 +23,7 @@ export function ComponentPreview({
   ...props
 }: React.ComponentProps<"div"> & {
   name: string
+  title?: string
   styleName?: Style["name"]
   align?: "center" | "start" | "end"
   description?: string
@@ -29,7 +31,6 @@ export function ComponentPreview({
   type?: "block" | "component" | "example"
   chromeLessOnMobile?: boolean
 }) {
-  console.log(Index);
   const Component = Index[styleName]?.[name]?.component;
 
   if (!Component) {
@@ -65,6 +66,7 @@ export function ComponentPreview({
           name={name}
           collapsible={false}
           styleName={styleName}
+          title={title}
         />
       }
       chromeLessOnMobile={chromeLessOnMobile}

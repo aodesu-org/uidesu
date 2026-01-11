@@ -6,6 +6,7 @@ import * as React from "react";
 
 import { useConfig } from "@/hooks/use-config";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/registry/aodesu/ui/tabs";
+import { Terminal } from "lucide-react";
 
 
 
@@ -61,6 +62,9 @@ export function CodeBlockCommand({
         }}
       >
         <div className="flex items-center gap-2 border-b border-[hsl(var(--border))] p-2">
+          <div className=" bg-foreground flex size-4 items-center justify-center rounded-[1px] opacity-70">
+            <Terminal className="text-[hsl(var(--text))] size-3" />
+          </div>
           <TabsList className="rounded-none bg-transparent p-0">
             {Object.entries(tabs).map(([key]) => {
               return (

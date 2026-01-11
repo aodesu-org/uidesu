@@ -1,4 +1,3 @@
-import { AtSign, Copy, Send } from 'lucide-react';
 import fs from "node:fs/promises";
 import path from "node:path";
 import * as React from "react";
@@ -8,11 +7,12 @@ import * as React from "react";
 import { highlightCode } from "@/lib/highlight-code";
 import { getRegistryItem } from "@/lib/registry";
 import { cn } from "@/lib/utils";
-import { Button } from "@/registry/aodesu/ui/button";
 import { Style } from "@/registry/styles";
 
 
 
+import ActionButtons from "./action-buttons";
+import { getIconForLanguageExtension } from "./icons";
 
 
 export async function ComponentSource({
@@ -75,7 +75,7 @@ export async function ComponentSource({
     )
   }
 
-  return <div></div>
+  return <div>code collapsible wrapper</div>
 }
 
 function ComponentCode({
@@ -91,28 +91,16 @@ function ComponentCode({
 }) {
   return (
     <figure data-rehype-pretty-code-figure="" className="[&>pre]:max-h-96">
-      {title && (
-        <figcaption
-          data-rehype-pretty-code-title=""
-          className="text-code-foreground [&_svg]:text-code-foreground flex items-center gap-2 [&_svg]:size-4 [&_svg]:opacity-70"
-          data-language={language}
-        >
-          {language}
-          {title}
-        </figcaption>
-      )}
-      <div className="flex w-full justify-end p-2">
-        <Button size="small" title='Enviar por correo'>
-          <AtSign />
-        </Button>
-        <Button size="small" title='Compartir'>
-          <Send />
-        </Button>
-        <Button size="small" title='Copiar'>
-          <Copy />
-        </Button>
-      </div>
-      <div dangerouslySetInnerHTML={{ __html: highlightedCode }}></div>
+      <figcaption
+        data-rehype-pretty-code-title=""
+        className="text-code-foreground [&_svg]:text-code-foreground flex items-center gap-2 border-b-[hsl(var(--border))] p-2 [&_svg]:size-4 [&_.icon_svg]:fill-current [&_.icon_svg]:opacity-70"
+        data-language={language}
+      >
+        <div className="icon">{getIconForLanguageExtension(language)}</div>
+        {title && <span className="flex-1">{title}</span>}
+        <ActionButtons code={code} />
+      </figcaption>
+      <div className="[&_code]:overflow-x-auto [&_code]:w-full" dangerouslySetInnerHTML={{ __html: highlightedCode }}></div>
     </figure>
   )
 }

@@ -1,0 +1,228 @@
+---
+title: Botón
+description: Los botones permiten a los usuarios realizar acciones y tomar decisiones con un solo toque.
+component: true
+links:
+  doc: https://ui.aodesu.com/components/button
+  api: https://ui.aodesu.com/api/button
+---
+
+<ComponentPreview
+  name="button-demo"
+  title="tsx"
+  description="Un botón básico con estilos predeterminados"
+/>
+
+## Introducción
+
+Los botones comunican acciones que los usuarios pueden realizar. Se utilizan típicamente en la interfaz de usuario, en lugares como:
+
+- Diálogos modales
+- Formularios
+- Tarjetas
+- Barras de herramientas
+
+## Instalación
+
+<CodeTabs>
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+```bash
+npx uidesu@latest add button
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+```bash
+npm install @radix-ui/react-slot
+```
+
+Copia y pega el siguiente código en tu proyecto:
+
+```tsx showLineNumbers title="components/ui/button.tsx"
+"use client"
+
+import * as React from "react"
+import { cn } from "@/lib/utils"
+
+type ButtonVariant = "ghost" | "contained" | "outlined" | "text"
+type ButtonColor = "neutral" | "primary" | "secondary" | "contrast"
+type ButtonSize = "small" | "medium" | "big"
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant
+  color?: ButtonColor
+  size?: ButtonSize
+  icon?: boolean
+}
+
+const baseClasses =
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium shrink-0 outline-none transition-transform transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-[3px] focus-visible:ring-ring/50"
+
+export function Button({
+  className,
+  variant = "ghost",
+  color = "neutral",
+  size = "medium",
+  icon,
+  children,
+  ...props
+}: ButtonProps) {
+  return (
+    <button
+      data-slot="button"
+      className={cn(baseClasses, className)}
+      {...props}
+    >
+      {children}
+    </button>
+  )
+}
+```
+
+</TabsContent>
+
+</CodeTabs>
+
+## Uso
+
+```tsx showLineNumbers
+import { Button } from "@/components/ui/button"
+```
+
+```tsx showLineNumbers title="Ejemplo básico"
+<Button>Botón</Button>
+```
+
+## Variantes
+
+El componente Button soporta múltiples variantes que comunican diferentes niveles de énfasis.
+
+### Contained
+
+Los botones contained tienen alta énfasis, se distinguen por su uso de elevación y relleno. Contienen acciones que son primarias para tu aplicación.
+
+<ComponentPreview
+  name="button-contained"
+  title="tsx"
+  description="Botones con variante contained"
+/>
+
+### Outlined
+
+Los botones outlined tienen énfasis medio. Contienen acciones que son importantes, pero no son la acción principal en tu aplicación.
+
+<ComponentPreview
+  name="button-outlined"
+  title="tsx"
+  description="Botones con variante outlined"
+/>
+
+### Ghost
+
+Los botones ghost tienen bajo énfasis y se utilizan típicamente para acciones menos pronunciadas.
+
+<ComponentPreview
+  name="button-ghost"
+  title="tsx"
+  description="Botones con variante ghost"
+/>
+
+### Text
+
+Los botones text se utilizan típicamente para acciones menos importantes.
+
+<ComponentPreview
+  name="button-text"
+  title="tsx"
+  description="Botones con variante text"
+/>
+
+## Colores
+
+Usa la prop `color` para aplicar el color del tema.
+
+<ComponentPreview
+  name="button-colors"
+  title="tsx"
+  description="Botones con diferentes colores"
+/>
+
+## Tamaños
+
+Para botones más grandes o más pequeños, usa la prop `size`.
+
+<ComponentPreview
+  name="button-sizes"
+  title="tsx"
+  description="Botones con diferentes tamaños"
+/>
+
+## Botones con iconos y etiquetas
+
+A veces es posible que desees tener iconos para ciertos botones para mejorar la experiencia del usuario de la aplicación, ya que reconocemos los logotipos más fácilmente que el texto sin formato.
+
+<ComponentPreview
+  name="button-with-icon"
+  title="tsx"
+  description="Botones con iconos"
+/>
+
+## Botones de icono
+
+Los botones de icono se encuentran comúnmente en las barras de aplicaciones y las barras de herramientas.
+
+<ComponentPreview
+  name="button-icon"
+  title="tsx"
+  description="Botones solo con iconos"
+/>
+
+## Estado deshabilitado
+
+La prop `disabled` deshabilitará el botón.
+
+<ComponentPreview
+  name="button-disabled"
+  title="tsx"
+  description="Botones deshabilitados"
+/>
+
+## Botones de carga
+
+Los botones pueden mostrar un estado de carga con un indicador de progreso.
+
+<ComponentPreview
+  name="button-loading"
+  title="tsx"
+  description="Botones con estado de carga"
+/>
+
+## API
+
+### Props
+
+| Prop       | Tipo                                                  | Default    | Descripción                                    |
+| ---------- | ----------------------------------------------------- | ---------- | ---------------------------------------------- |
+| `variant`  | `"ghost" \| "contained" \| "outlined" \| "text"`     | `"ghost"`  | La variante del botón.                         |
+| `color`    | `"neutral" \| "primary" \| "secondary" \| "contrast"` | `"neutral"`| El color del tema a aplicar.                   |
+| `size`     | `"small" \| "medium" \| "big"`                        | `"medium"` | El tamaño del botón.                           |
+| `icon`     | `boolean`                                             | `false`    | Si es un botón de solo icono.                  |
+| `disabled` | `boolean`                                             | `false`    | Si el botón está deshabilitado.                |
+| `children` | `ReactNode`                                           | -          | El contenido del botón.                        |
+
+Todas las props adicionales de `HTMLButtonElement` son soportadas.
+
+## Accesibilidad
+
+- El componente renderiza un elemento `<button>` nativo.
+- El foco del teclado es totalmente gestionado.
+- Los estados deshabilitados se comunican apropiadamente a las tecnologías de asistencia.

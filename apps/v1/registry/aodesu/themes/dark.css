@@ -4,9 +4,16 @@
 [data-style="aodesu"][data-theme="dark"] {
   --font-branch: "Charm", cursive;
 
-  --background: 0 0% 4%;
-  --background-elevated-1: 0 0% 5%;
-  --background-elevated-2: 0 0% 8.5%;
+  --text: 0 0% 90%;
+  --background: 0 0% 6%;
+  --text-muted-foreground: 0 0% 50%;
+
+  --background-elevated-1: 0 0% 8.5%;
+  --text-muted-foreground-elevated-1: 0 0% 65%;
+
+  --background-elevated-2: 0 0% 11%;
+  --text-muted-foreground-elevated-2: 0 0% 70%;
+
   --foreground: 0 0% 80%;
   --foreground-light: 0 0% 100%;
   --inverse-foreground: 0 0% 10%;

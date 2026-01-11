@@ -1,4 +1,3 @@
-import { AtSign, Copy, Send } from "lucide-react";
 import React from "react";
 
 
@@ -7,10 +6,11 @@ import { cn } from "@/lib/utils";
 
 
 
+import ActionButtons from "./components/action-buttons";
 import { CodeBlockCommand } from "./components/code-block-command";
 import { CodeTabs } from "./components/code-tabs";
 import { ComponentPreview } from "./components/component-preview";
-import { Button } from "./registry/aodesu/ui/button";
+import { getIconForLanguageExtension } from "./components/icons";
 import { TabsContent, TabsList, TabsTrigger } from "./registry/aodesu/ui/tabs";
 
 
@@ -87,6 +87,91 @@ export const mdxComponents = {
   blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (
     <blockquote />
   ),
+  table: ({ className, ...props }: React.ComponentProps<"table">) => (
+    <div className="w-full overflow-x-auto rounded-md border border-[hsl(var(--border))]">
+      <table
+        className={cn("w-full border-collapse text-sm", className)}
+        {...props}
+      />
+    </div>
+  ),
+  thead: ({ className, ...props }: React.ComponentProps<"thead">) => (
+    <thead
+      className={cn(
+        "border-b border-b-[hsl(var(--border))] bg-[hsl(var(--background-elevated-1))]",
+        className
+      )}
+      {...props}
+    />
+  ),
+  tbody: ({ className, ...props }: React.ComponentProps<"tbody">) => (
+    <tbody className={cn("", className)} {...props} />
+  ),
+  tr: ({ className, ...props }: React.ComponentProps<"tr">) => (
+    <tr
+      className={cn(
+        "border-b border-b-[hsl(var(--border))] hover:bg-[hsl(var(--muted))]",
+        className
+      )}
+      {...props}
+    />
+  ),
+  th: ({ className, ...props }: React.ComponentProps<"th">) => (
+    <th
+      className={cn(
+        "text-foreground px-4 py-2 text-left font-semibold",
+        className
+      )}
+      {...props}
+    />
+  ),
+  td: ({ className, ...props }: React.ComponentProps<"td">) => (
+    <td className={cn("text-foreground px-4 py-2", className)} {...props} />
+  ),
+  pre: ({ className, children, ...props }: React.ComponentProps<"pre">) => {
+    return (
+      <pre
+        className={cn(
+          "min-w-0 overflow-x-auto px-4 outline-none has-[[data-highlighted-line]]:px-0 has-[[data-line-numbers]]:px-0 has-[[data-slot=tabs]]:p-0 [&_code]:w-full [&_code]:overflow-x-auto [&_code]:py-3.5 [&>div]:border-b [&>div]:border-b-[hsl(var(--border))]",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </pre>
+    )
+  },
+  figure: ({ className, ...props }: React.ComponentProps<"figure">) => {
+    return (
+      <figure
+        className={cn("border border-[hsl(var(--border))]", className)}
+        {...props}
+      />
+    )
+  },
+  figcaption: ({
+    className,
+    children,
+    ...props
+  }: React.ComponentProps<"figcaption">) => {
+    const iconExtension =
+      "data-language" in props && typeof props["data-language"] === "string"
+        ? getIconForLanguageExtension(props["data-language"])
+        : null
+
+    return (
+      <figcaption
+        className={cn(
+          "text-code-foreground [&_svg]:text-code-foreground flex items-center gap-2 border-b border-b-[hsl(var(--border))] p-2 [&_svg]:size-4 [&_svg]:fill-current [&_svg]:opacity-70",
+          className
+        )}
+        {...props}
+      >
+        {iconExtension}
+        {children}
+      </figcaption>
+    )
+  },
   code: ({
     className,
     __raw__,
@@ -95,6 +180,7 @@ export const mdxComponents = {
     __yarn__,
     __pnpm__,
     __bun__,
+    filename,
     ...props
   }: React.ComponentProps<"code"> & {
     __raw__?: string
@@ -103,14 +189,11 @@ export const mdxComponents = {
     __yarn__?: string
     __pnpm__?: string
     __bun__?: string
+    filename?: string
   }) => {
-    if (
-      typeof props.children === "string" &&
-      !__npm__ &&
-      !__yarn__ &&
-      !__pnpm__ &&
-      !__bun__
-    ) {
+    console.log("filename", className)
+
+    if (typeof props.children === "string") {
       return (
         <code
           className={cn(
@@ -121,7 +204,6 @@ export const mdxComponents = {
       )
     }
 
-    // Si tiene props de package managers
     const isNpmCommand = __npm__ || __yarn__ || __pnpm__ || __bun__
     if (isNpmCommand) {
       return (
@@ -134,26 +216,23 @@ export const mdxComponents = {
       )
     }
 
-    // Para otros casos de código block
     return (
-      <div className="overflow-hidden rounded-lg border border-[hsl(var(--border))]">
+      <>
         {__raw__ && (
-          <div className="flex justify-end p-2">
-            <Button size="small" title='Enviar por correo'>
-              <AtSign />
-            </Button>
-            <Button size="small" title='Compartir'>
-              <Send />
-            </Button>
-            <Button size="small" title='Copiar'>
-              <Copy />
-            </Button>
+          <div className="flex p-2">
+            <div className="flex flex-1 items-center">
+              <span className="text-sm text-[hsl(var(--text-muted-foreground))]">
+                {filename || "code"}
+              </span>
+            </div>
+            <ActionButtons code={__raw__} />
           </div>
         )}
         <code {...props} />
-      </div>
+      </>
     )
   },
+
   TabsList: ({
     className,
     ...props
