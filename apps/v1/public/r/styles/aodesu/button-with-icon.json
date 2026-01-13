@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.aodesu.com/schema/registry-item.json",
+  "name": "button-with-icon",
+  "type": "registry:example",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/aodesu/examples/button/button-with-icon.tsx",
+      "content": "import { Download, Plus, Send, Upload } from \"lucide-react\"\n\nimport { Button } from \"../../ui/button\"\n\nexport default function ButtonWithIcon() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button variant=\"contained\">\n        <Send />\n        Enviar\n      </Button>\n      <Button variant=\"outlined\" color=\"primary\">\n        <Download />\n        Descargar\n      </Button>\n      <Button variant=\"ghost\" color=\"secondary\">\n        <Upload />\n        Subir\n      </Button>\n      <Button variant=\"contained\" color=\"primary\">\n        <Plus />\n        Crear\n      </Button>\n    </div>\n  )\n}\n",
+      "type": "registry:example"
+    }
+  ]
+}

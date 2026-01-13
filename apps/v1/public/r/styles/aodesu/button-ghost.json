@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.aodesu.com/schema/registry-item.json",
+  "name": "button-ghost",
+  "type": "registry:example",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/aodesu/examples/button/button-ghost.tsx",
+      "content": "import { Button } from \"../../ui/button\"\n\nexport default function ButtonGhost() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button variant=\"ghost\" color=\"primary\">\n        Primary\n      </Button>\n      <Button variant=\"ghost\" color=\"secondary\">\n        Secondary\n      </Button>\n      <Button variant=\"ghost\" color=\"neutral\">\n        Neutral\n      </Button>\n    </div>\n  )\n}\n",
+      "type": "registry:example"
+    }
+  ]
+}

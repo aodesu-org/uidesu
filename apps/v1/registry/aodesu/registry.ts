@@ -29,6 +29,20 @@ export const registry = {
         name: "style",
         ...AODESU_STYLE,
       },
+      {
+        name: "utils",
+        type: "registry:lib",
+        files: [
+          {
+            path: "lib/utils.ts",
+            type: "registry:lib",
+          },
+          {
+            path: "lib/slot.tsx",
+            type: "registry:lib",
+          },
+        ],
+      },
       ...ui,
       ...examples,
       ...themes,

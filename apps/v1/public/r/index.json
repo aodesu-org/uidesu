@@ -1,17 +1,90 @@
-{
-  "$schema": "https://ui.aodesu.com/schema/registry-item.json",
-  "name": "index",
-  "type": "registry:style",
-  "dependencies": [
-    "class-variance-authority",
-    "lucide-react"
-  ],
-  "devDependencies": [
-    "tw-animate-css"
-  ],
-  "registryDependencies": [
-    "utils"
-  ],
-  "files": [],
-  "cssVars": {}
-}
+[
+  {
+    "name": "index",
+    "type": "registry:style"
+  },
+  {
+    "name": "style",
+    "type": "registry:style"
+  },
+  {
+    "name": "utils",
+    "type": "registry:lib"
+  },
+  {
+    "name": "avatar",
+    "type": "registry:ui"
+  },
+  {
+    "name": "button",
+    "type": "registry:ui"
+  },
+  {
+    "name": "avatar-demo",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-demo",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-contained",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-outlined",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-ghost",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-text",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-colors",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-sizes",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-with-icon",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-icon",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-disabled",
+    "type": "registry:example"
+  },
+  {
+    "name": "button-loading",
+    "type": "registry:example"
+  },
+  {
+    "name": "theme-stone",
+    "type": "registry:theme"
+  },
+  {
+    "name": "theme-zinc",
+    "type": "registry:theme"
+  },
+  {
+    "name": "theme-neutral",
+    "type": "registry:theme"
+  },
+  {
+    "name": "theme-gray",
+    "type": "registry:theme"
+  },
+  {
+    "name": "theme-slate",
+    "type": "registry:theme"
+  }
+]

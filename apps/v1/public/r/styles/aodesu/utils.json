@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.aodesu.com/schema/registry-item.json",
+  "name": "utils",
+  "type": "registry:lib",
+  "files": [
+    {
+      "path": "registry/aodesu/lib/utils.ts",
+      "content": "import { clsx, type ClassValue } from \"clsx\"\nimport { twMerge } from \"tailwind-merge\"\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n\nexport function absoluteUrl(path: string) {\n  return `${process.env.NEXT_PUBLIC_APP_URL}${path}`\n}\n\nexport function getLocalizedUrl(url: string, targetLocale: string) {\n  return url.replace(/^\\/(en|es)(\\/|$)/, `/${targetLocale}$2`)\n}\n",
+      "type": "registry:lib"
+    },
+    {
+      "path": "registry/aodesu/lib/slot.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport interface SlotProps extends React.HTMLAttributes<HTMLElement> {\n  children: React.ReactElement\n}\n\nexport const Slot = React.forwardRef<HTMLElement, SlotProps>(\n  ({ children, className, ...props }, ref) => {\n    if (!React.isValidElement(children)) return null\n\n    return React.cloneElement(children, {\n      ...props,\n      ref,\n      className: cn(className, (children as any).props?.className),\n    } as any) as React.ReactElement & { ref: React.Ref<HTMLElement> }\n  }\n)\n\nSlot.displayName = \"Slot\"\n",
+      "type": "registry:lib"
+    }
+  ]
+}

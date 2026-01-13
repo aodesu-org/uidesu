@@ -1,10 +1,12 @@
-import { exec, execFile } from "child_process"
+import { exec } from "child_process"
 import { existsSync, promises as fs } from "fs"
 import path from "path"
+import prettier from "prettier"
 import { rimraf } from "rimraf"
 import { registrySchema } from "uidesu/schema"
 
 import { getAllBlocks } from "@/lib/blocks"
+import { baseColors } from "@/registry/base-colors"
 import { STYLES, type Style } from "@/registry/styles"
 
 
@@ -131,25 +133,20 @@ async function buildRegistryJsonFile(styleName: string) {
     }),
   }
 
-  // 3. Create the output directory and write registry.json.
+  // 3. Create the output directory and write index.json.
   const outputDir = path.join(
     process.cwd(),
     styleName === "aodesu" ? `public/r/styles/${styleName}` : `public/r/${styleName}`
   )
   await fs.mkdir(outputDir, { recursive: true })
 
-  // 4. Write registry.json to output directory and format it.
-  const registryJsonPath = path.join(outputDir, "registry.json")
-  await fs.writeFile(registryJsonPath, JSON.stringify(fixedRegistry, null, 2))
-  await new Promise<void>((resolve, reject) => {
-    execFile('prettier', ['--write', registryJsonPath], (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
-  })
+  // 4. Write formatted index.json to output directory using Prettier API.
+  const indexJsonPath = path.join(outputDir, "index.json")
+  const formattedIndex = await prettier.format(
+    JSON.stringify(fixedRegistry, null, 2),
+    { parser: "json" }
+  )
+  await fs.writeFile(indexJsonPath, formattedIndex)
 
   // 5. Write temporary registry file needed by uidesu build.
   const tempRegistryPath = path.join(process.cwd(), `registry-${styleName}.json`)
@@ -189,12 +186,292 @@ async function buildBlocksIndex() {
   }))
 
   rimraf.sync(path.join(process.cwd(), "registry/__blocks__.json"))
+  const formattedBlocks = await prettier.format(
+    JSON.stringify(payload, null, 2),
+    { parser: "json" }
+  )
   await fs.writeFile(
     path.join(process.cwd(), "registry/__blocks__.json"),
-    JSON.stringify(payload, null, 2)
+    formattedBlocks
   )
+}
 
-  await exec(`prettier --write registry/__blocks__.json`)
+async function buildStylesIndex() {
+  const styles = Array.from(STYLES).map((s) => ({
+    name: s.name,
+    label: (s as any).label ?? (s as any).title ?? s.name,
+  }))
+
+  const outputDir = path.join(process.cwd(), "public/r/styles")
+  await fs.mkdir(outputDir, { recursive: true })
+
+  const stylesIndexPath = path.join(outputDir, "index.json")
+  const formatted = await prettier.format(JSON.stringify(styles, null, 2), {
+    parser: "json",
+  })
+  await fs.writeFile(stylesIndexPath, formatted)
+}
+
+async function buildRootIndex(styles: Style[]) {
+  let items: Array<{
+    name: string
+    type: string
+    description?: string
+    categories?: string[]
+  }> = []
+
+  for (const style of styles) {
+    const { registry: importedRegistry } = await import(
+      `../registry/${style.name}/registry.ts`
+    )
+
+    const parseResult = registrySchema.safeParse(importedRegistry)
+    if (!parseResult.success) {
+      console.error(`❌ Registry validation failed for ${style.name}:`)
+      console.error(parseResult.error.format())
+      throw new Error(`Invalid registry schema for ${style.name}`)
+    }
+
+    const registry = parseResult.data
+    for (const item of registry.items) {
+      items.push({
+        name: item.name,
+        type: item.type,
+        description: item.description,
+        categories: item.categories,
+      })
+    }
+  }
+
+  const outputDir = path.join(process.cwd(), "public/r")
+  await fs.mkdir(outputDir, { recursive: true })
+
+  const indexPath = path.join(outputDir, "index.json")
+  const formatted = await prettier.format(JSON.stringify(items, null, 2), {
+    parser: "json",
+  })
+  await fs.writeFile(indexPath, formatted)
+}
+
+async function buildColorsJson() {
+  const outputDir = path.join(process.cwd(), "public/r/colors")
+  await fs.mkdir(outputDir, { recursive: true })
+
+  // Template for inline colors (without CSS variables)
+  const inlineColorsTemplate = `@tailwind base;
+@tailwind components;
+@tailwind utilities;`
+
+  // Template for CSS variables
+  const cssVarsTemplate = (color: (typeof baseColors)[number]) => `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: ${color.cssVars.light.background};
+    --foreground: ${color.cssVars.light.foreground};
+    --card: ${color.cssVars.light.card};
+    --card-foreground: ${color.cssVars.light["card-foreground"]};
+    --popover: ${color.cssVars.light.popover};
+    --popover-foreground: ${color.cssVars.light["popover-foreground"]};
+    --primary: ${color.cssVars.light.primary};
+    --primary-foreground: ${color.cssVars.light["primary-foreground"]};
+    --secondary: ${color.cssVars.light.secondary};
+    --secondary-foreground: ${color.cssVars.light["secondary-foreground"]};
+    --muted: ${color.cssVars.light.muted};
+    --muted-foreground: ${color.cssVars.light["muted-foreground"]};
+    --accent: ${color.cssVars.light.accent};
+    --accent-foreground: ${color.cssVars.light["accent-foreground"]};
+    --destructive: ${color.cssVars.light.destructive};
+    --destructive-foreground: ${color.cssVars.light["destructive-foreground"]};
+    --border: ${color.cssVars.light.border};
+    --input: ${color.cssVars.light.input};
+    --ring: ${color.cssVars.light.ring};
+    --radius: ${(color.cssVars.light as any).radius || "0.5rem"};
+    --chart-1: ${color.cssVars.light["chart-1"]};
+    --chart-2: ${color.cssVars.light["chart-2"]};
+    --chart-3: ${color.cssVars.light["chart-3"]};
+    --chart-4: ${color.cssVars.light["chart-4"]};
+    --chart-5: ${color.cssVars.light["chart-5"]};
+  }
+
+  .dark {
+    --background: ${color.cssVars.dark.background};
+    --foreground: ${color.cssVars.dark.foreground};
+    --card: ${color.cssVars.dark.card};
+    --card-foreground: ${color.cssVars.dark["card-foreground"]};
+    --popover: ${color.cssVars.dark.popover};
+    --popover-foreground: ${color.cssVars.dark["popover-foreground"]};
+    --primary: ${color.cssVars.dark.primary};
+    --primary-foreground: ${color.cssVars.dark["primary-foreground"]};
+    --secondary: ${color.cssVars.dark.secondary};
+    --secondary-foreground: ${color.cssVars.dark["secondary-foreground"]};
+    --muted: ${color.cssVars.dark.muted};
+    --muted-foreground: ${color.cssVars.dark["muted-foreground"]};
+    --accent: ${color.cssVars.dark.accent};
+    --accent-foreground: ${color.cssVars.dark["accent-foreground"]};
+    --destructive: ${color.cssVars.dark.destructive};
+    --destructive-foreground: ${color.cssVars.dark["destructive-foreground"]};
+    --border: ${color.cssVars.dark.border};
+    --input: ${color.cssVars.dark.input};
+    --ring: ${color.cssVars.dark.ring};
+    --chart-1: ${color.cssVars.dark["chart-1"]};
+    --chart-2: ${color.cssVars.dark["chart-2"]};
+    --chart-3: ${color.cssVars.dark["chart-3"]};
+    --chart-4: ${color.cssVars.dark["chart-4"]};
+    --chart-5: ${color.cssVars.dark["chart-5"]};
+  }
+}`
+
+  for (const color of baseColors) {
+    // Generate inlineColors mapping - maps semantic color names to Tailwind color classes
+    const inlineColors = {
+      light: {
+        background: "white",
+        foreground: `${color.name}-950`,
+        card: "white",
+        "card-foreground": `${color.name}-950`,
+        popover: "white",
+        "popover-foreground": `${color.name}-950`,
+        primary: `${color.name}-900`,
+        "primary-foreground": `${color.name}-50`,
+        secondary: `${color.name}-100`,
+        "secondary-foreground": `${color.name}-900`,
+        muted: `${color.name}-100`,
+        "muted-foreground": `${color.name}-500`,
+        accent: `${color.name}-100`,
+        "accent-foreground": `${color.name}-900`,
+        destructive: "red-600",
+        "destructive-foreground": `${color.name}-50`,
+        border: `${color.name}-200`,
+        input: `${color.name}-200`,
+        ring: `${color.name}-950`,
+      },
+      dark: {
+        background: `${color.name}-950`,
+        foreground: `${color.name}-50`,
+        card: `${color.name}-950`,
+        "card-foreground": `${color.name}-50`,
+        popover: `${color.name}-950`,
+        "popover-foreground": `${color.name}-50`,
+        primary: `${color.name}-50`,
+        "primary-foreground": `${color.name}-900`,
+        secondary: `${color.name}-800`,
+        "secondary-foreground": `${color.name}-50`,
+        muted: `${color.name}-800`,
+        "muted-foreground": `${color.name}-400`,
+        accent: `${color.name}-800`,
+        "accent-foreground": `${color.name}-50`,
+        destructive: "red-400",
+        "destructive-foreground": `${color.name}-50`,
+        border: `${color.name}-800`,
+        input: `${color.name}-800`,
+        ring: `${color.name}-300`,
+      },
+    }
+
+    const colorData = {
+      name: color.name,
+      label: color.label,
+      activeColor: color.activeColor,
+      inlineColors,
+      cssVars: color.cssVars,
+      inlineColorsTemplate,
+      cssVarsTemplate: cssVarsTemplate(color),
+    }
+
+    const colorPath = path.join(outputDir, `${color.name}.json`)
+    const formatted = await prettier.format(JSON.stringify(colorData, null, 2), {
+      parser: "json",
+    })
+    await fs.writeFile(colorPath, formatted)
+  }
+
+  console.log(
+    `🎨 Generated ${baseColors.length} color files: ${baseColors.map((c) => c.name).join(", ")}`
+  )
+}
+
+async function buildIconsJson() {
+  const outputDir = path.join(process.cwd(), "public/r/icons")
+  await fs.mkdir(outputDir, { recursive: true })
+
+  // Define icon mappings for different libraries
+  const icons = {
+    // Lucide icons mapping
+    lucide: {
+      Check: "Check",
+      ChevronDown: "ChevronDown",
+      ChevronRight: "ChevronRight",
+      ChevronLeft: "ChevronLeft",
+      ChevronUp: "ChevronUp",
+      Circle: "Circle",
+      X: "X",
+      Search: "Search",
+      Moon: "Moon",
+      Sun: "Sun",
+      Loader2: "Loader2",
+      Plus: "Plus",
+      Minus: "Minus",
+      Settings: "Settings",
+      Home: "Home",
+      User: "User",
+      Menu: "Menu",
+      Bell: "Bell",
+      Heart: "Heart",
+      Star: "Star",
+      ArrowRight: "ArrowRight",
+      ArrowLeft: "ArrowLeft",
+      ArrowUp: "ArrowUp",
+      ArrowDown: "ArrowDown",
+      Calendar: "Calendar",
+      Clock: "Clock",
+      Mail: "Mail",
+      Phone: "Phone",
+      MapPin: "MapPin",
+      Camera: "Camera",
+      Image: "Image",
+      File: "File",
+      FileText: "FileText",
+      Download: "Download",
+      Upload: "Upload",
+      Link: "Link",
+      ExternalLink: "ExternalLink",
+      Trash: "Trash",
+      Edit: "Edit",
+      Copy: "Copy",
+      Save: "Save",
+      Share: "Share",
+      Filter: "Filter",
+      MoreHorizontal: "MoreHorizontal",
+      MoreVertical: "MoreVertical",
+      AlertCircle: "AlertCircle",
+      AlertTriangle: "AlertTriangle",
+      Info: "Info",
+      CheckCircle: "CheckCircle",
+      XCircle: "XCircle",
+      Eye: "Eye",
+      EyeOff: "EyeOff",
+      Lock: "Lock",
+      Unlock: "Unlock",
+      LogIn: "LogIn",
+      LogOut: "LogOut",
+      Zap: "Zap",
+      Wifi: "Wifi",
+      WifiOff: "WifiOff",
+      Battery: "Battery",
+      Bluetooth: "Bluetooth",
+    },
+  }
+
+  const iconsPath = path.join(outputDir, "index.json")
+  const formatted = await prettier.format(JSON.stringify(icons, null, 2), {
+    parser: "json",
+  })
+  await fs.writeFile(iconsPath, formatted)
+
+  console.log(`🎭 Generated icons index with ${Object.keys(icons).length} icon libraries`)
 }
 
 try {
@@ -217,6 +494,18 @@ try {
 
   console.log("\n🗂️ Building registry/__blocks__.json...")
   await buildBlocksIndex()
+
+  console.log("\n🗂️ Building public/r/styles/index.json...")
+  await buildStylesIndex()
+
+  console.log("\n🗂️ Building public/r/index.json...")
+  await buildRootIndex(styles)
+
+  console.log("\n🎨 Building public/r/colors/*.json...")
+  await buildColorsJson()
+
+  console.log("\n🎭 Building public/r/icons/index.json...")
+  await buildIconsJson()
 
   // Clean up intermediate files.
   console.log("\n🧹 Cleaning up intermediate files...")

@@ -2,12 +2,19 @@ import { cosmiconfig } from "cosmiconfig";
 import fg from "fast-glob";
 import path from "path";
 import { loadConfig } from "tsconfig-paths";
-import z from "zod";
+import { z } from "zod";
 import { BUILTIN_REGISTRIES } from "../registry/constants";
 import { configSchema, rawConfigSchema, workspaceConfigSchema } from "../schema";
 import { getProjectInfo } from "./get-project-info";
 import { highlighter } from "./highlighter";
 import { resolveImport } from "./resolve-import";
+
+export const DEFAULT_STYLE = "default"
+export const DEFAULT_COMPONENTS = "@/components"
+export const DEFAULT_UTILS = "@/lib/utils"
+export const DEFAULT_TAILWIND_CSS = "app/globals.css"
+export const DEFAULT_TAILWIND_CONFIG = "tailwind.config.js"
+export const DEFAULT_TAILWIND_BASE_COLOR = "slate"
 
 // TODO: Figure out if we want to support all cosmiconfig formats.
 // A simple components.json file would be nice.
@@ -199,7 +206,7 @@ export function findCommonRoot(cwd: string, resolvedPath: string) {
 // TODO: Cache this call.
 export async function getTargetStyleFromConfig(cwd: string, fallback: string) {
   const projectInfo = await getProjectInfo(cwd)
-  return projectInfo?.tailwindVersion === "v4" ? "new-york-v4" : fallback
+  return projectInfo?.tailwindVersion === "v4" ? "aodesu" : fallback
 }
 
 type DeepPartial<T> = {

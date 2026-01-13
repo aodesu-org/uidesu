@@ -20,5 +20,5 @@ export const ui: Registry["items"] = [
         type: "registry:ui",
       },
     ],
-  }
+  },
 ]

@@ -39,7 +39,7 @@
   "bin": "./dist/index.js",
   "scripts": {
     "dev": "tsup --watch",
-    "start:dev": "cross-env REGISTRY_URL=https://localhost:4000/r node dist/index.js"
+    "start:dev": "cross-env REGISTRY_URL=http://localhost:4000/r node dist/index.js"
   },
   "dependencies": {
     "@antfu/ni": "^25.0.0",

@@ -7,6 +7,28 @@ import * as React from "react"
 
 export const Index: Record<string, Record<string, any>> = {
   "aodesu": {
+    "utils": {
+      name: "utils",
+      description: "",
+      type: "registry:lib",
+      registryDependencies: undefined,
+      files: [{
+        path: "registry/aodesu/lib/utils.ts",
+        type: "registry:lib",
+        target: ""
+      },{
+        path: "registry/aodesu/lib/slot.tsx",
+        type: "registry:lib",
+        target: ""
+      }],
+      component: React.lazy(async () => {
+        const mod = await import("@/registry/aodesu/lib/utils.ts")
+        const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+        return { default: mod.default || mod[exportName] }
+      }),
+      categories: undefined,
+      meta: undefined,
+    },
     "avatar": {
       name: "avatar",
       description: "",

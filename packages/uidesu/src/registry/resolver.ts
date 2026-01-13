@@ -78,7 +78,6 @@ export async function fetchRegistryItems(
 
       const path = `styles/${config?.style ?? "aodesu"}/${item}.json`;
       const [result] = await fetchRegistry([path], options);
-        console.log("TEST - LLEGO AKI")
       try {
         return registryItemSchema.parse(result);
       } catch (error) {

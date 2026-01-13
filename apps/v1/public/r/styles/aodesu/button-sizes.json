@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.aodesu.com/schema/registry-item.json",
+  "name": "button-sizes",
+  "type": "registry:example",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/aodesu/examples/button/button-sizes.tsx",
+      "content": "import { Button } from \"../../ui/button\"\n\nexport default function ButtonSizes() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button variant=\"contained\" size=\"small\">\n        Small\n      </Button>\n      <Button variant=\"contained\" size=\"medium\">\n        Medium\n      </Button>\n      <Button variant=\"contained\" size=\"big\">\n        Big\n      </Button>\n    </div>\n  )\n}\n",
+      "type": "registry:example"
+    }
+  ]
+}

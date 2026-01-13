@@ -35,6 +35,20 @@
       "cssVars": {}
     },
     {
+      "name": "utils",
+      "type": "registry:lib",
+      "files": [
+        {
+          "path": "registry/aodesu/lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/aodesu/lib/slot.tsx",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "avatar",
       "type": "registry:ui",
       "files": [

@@ -1,4 +1,4 @@
-import { Registry } from "uidesu/schema";
+import { Registry } from "uidesu/schema"
 
 export const examples: Registry["items"] = [
   {
@@ -132,5 +132,5 @@ export const examples: Registry["items"] = [
         type: "registry:example",
       },
     ],
-  }
+  },
 ]

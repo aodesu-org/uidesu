@@ -1,14 +1,21 @@
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { mdxComponents } from "@/mdx-components"
-import fm from "front-matter"
-import { findNeighbour } from "fumadocs-core/page-tree"
-import z from "zod"
+import { mdxComponents } from "@/mdx-components";
+import fm from "front-matter";
+import { findNeighbour } from "fumadocs-core/page-tree";
+import { notFound } from "next/navigation";
+import z from "zod";
 
-import { source } from "@/lib/source"
-import { absoluteUrl, getLocalizedUrl } from "@/lib/utils"
-import { DocsCopyPage } from "@/components/docs-copy-page"
-import LanguageAlternativeAlert from "@/components/language-alternative-alert"
+
+
+import { DocsCopyPage } from "@/components/docs-copy-page";
+import LanguageAlternativeAlert from "@/components/language-alternative-alert";
+import { source } from "@/lib/source";
+import { absoluteUrl, getLocalizedUrl } from "@/lib/utils";
+import Link from "next/link";
+import { NeighboursNav } from "./neighbours-nav";
+
+
+
+
 
 export function generateStaticParams() {
   return source.generateParams()
@@ -29,11 +36,9 @@ export default async function Page(props: {
 
   console.log("Found page:", page)
 
-  // Si la página no se encuentra en el idioma solicitado, buscar en otros idiomas
   if (!page) {
     console.log("Page not found for:", { slug, lang: requestedLang })
 
-    // Buscar en otros idiomas
     const availableLanguages = Object.keys(source.pageTree)
 
     for (const otherLang of availableLanguages) {
@@ -52,19 +57,16 @@ export default async function Page(props: {
       }
     }
 
-    // Si no se encontró en ningún idioma
     if (!alternativePage) {
       notFound()
     }
 
-    // Usar la página del idioma alternativo
     page = alternativePage
   }
 
   const doc = page.data
   const MDX = doc.body
 
-  // Usar el tree del idioma de la página encontrada (puede ser diferente al solicitado)
   const pageLang = usingAlternativeLanguage ? alternativeLang : requestedLang
   const localizedTree = source.pageTree[pageLang]
   const neighbours = findNeighbour(localizedTree, page.url)
@@ -85,12 +87,16 @@ export default async function Page(props: {
     })
     .parse(attributes)
 
+  const transformedNeighbours = {
+    previous: neighbours.previous ? { ...neighbours.previous, name: typeof neighbours.previous.name === 'string' ? neighbours.previous.name : String(neighbours.previous.name || '') } : undefined,
+    next: neighbours.next ? { ...neighbours.next, name: typeof neighbours.next.name === 'string' ? neighbours.next.name : String(neighbours.next.name || '') } : undefined,
+  }
+
   return (
     <div className="flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full">
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="h-(--top-spacing) shrink-0" />
         <div className="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 py-6 text-neutral-800 md:px-0 lg:py-8 dark:text-neutral-100">
-          {/* Mostrar aviso si estamos usando un idioma alternativo */}
           {usingAlternativeLanguage && (
             <LanguageAlternativeAlert
               currentLang={requestedLang}
@@ -143,37 +149,7 @@ export default async function Page(props: {
             <MDX components={mdxComponents} />
           </div>
 
-          {/* Aquí podrías agregar la navegación entre páginas si lo deseas */}
-          {neighbours && (neighbours.previous || neighbours.next) && (
-            <div className="mt-8 flex flex-col gap-4 border-t border-gray-200 pt-8 sm:flex-row sm:justify-between dark:border-gray-800">
-              {neighbours.previous && (
-                <a
-                  href={neighbours.previous.url}
-                  className="flex flex-col gap-1 rounded-lg border border-gray-200 p-4 transition-colors hover:border-gray-300 sm:max-w-[45%] dark:border-gray-800 dark:hover:border-gray-700"
-                >
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    Anterior
-                  </span>
-                  <span className="font-medium text-blue-600 dark:text-blue-400">
-                    {neighbours.previous.name}
-                  </span>
-                </a>
-              )}
-              {neighbours.next && (
-                <a
-                  href={neighbours.next.url}
-                  className="ml-auto flex flex-col gap-1 rounded-lg border border-gray-200 p-4 text-right transition-colors hover:border-gray-300 sm:max-w-[45%] dark:border-gray-800 dark:hover:border-gray-700"
-                >
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    Siguiente
-                  </span>
-                  <span className="font-medium text-blue-600 dark:text-blue-400">
-                    {neighbours.next.name}
-                  </span>
-                </a>
-              )}
-            </div>
-          )}
+          <NeighboursNav neighbours={transformedNeighbours} requestedLang={requestedLang} />
         </div>
       </div>
     </div>

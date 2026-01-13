@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.aodesu.com/schema/registry-item.json",
+  "name": "button-loading",
+  "type": "registry:example",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/aodesu/examples/button/button-loading.tsx",
+      "content": "\"use client\"\n\nimport React from \"react\"\n\nimport { Button } from \"../../ui/button\"\n\nexport default function ButtonLoading() {\n  const [loading, setLoading] = React.useState<boolean>(false)\n  return (\n    <div className=\"flex flex-col gap-4\">\n      <div className=\"w-full border-b border-b-[hsl(var(--border))] pb-4\">\n        <Button\n          onClick={() => setLoading(!loading)}\n          variant=\"outlined\"\n          fullWidth\n        >\n          {loading ? \"Desactivar\" : \"Activar\"}\n        </Button>\n      </div>\n      <div className=\"flex flex-wrap items-center gap-4\">\n        <Button loading={loading}>Botón 1</Button>\n        <Button variant=\"contained\" color=\"primary\" loading={loading}>\n          Botón 2\n        </Button>\n        <Button variant=\"outlined\" loading={loading}>\n          Botón 3\n        </Button>\n      </div>\n    </div>\n  )\n}\n",
+      "type": "registry:example"
+    }
+  ]
+}

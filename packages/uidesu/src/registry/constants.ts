@@ -16,3 +16,19 @@ export const BASE_COLORS = [
 export const BUILTIN_REGISTRIES: z.infer<typeof registryConfigSchema> = {
   "@uidesu": `${REGISTRY_URL}/styles/{style}/{name}.json`,
 }
+
+
+export const DEPRECATED_COMPONENTS = [
+  {
+    name: "toast",
+    deprecatedBy: "sonner",
+    message:
+      "The toast component is deprecated. Use the sonner component instead.",
+  },
+  {
+    name: "toaster",
+    deprecatedBy: "sonner",
+    message:
+      "The toaster component is deprecated. Use the sonner component instead.",
+  },
+]

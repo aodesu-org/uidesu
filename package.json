@@ -16,7 +16,9 @@
     "dev": "turbo run dev --parallel",
     "registry:build": "pnpm --filter=v1 registry:build && pnpm lint:fix && pnpm format:write -- --loglevel silent",
     "uidesu:dev": "turbo --filter=uidesu dev",
-    "uidesu": "pnpm --filter=uidesu start:dev"
+    "uidesu": "pnpm --filter=uidesu start:dev",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix"
   },
   "packageManager": "pnpm@10.16.1",
   "dependencies": {

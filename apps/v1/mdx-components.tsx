@@ -84,55 +84,58 @@ export const mdxComponents = {
   p: ({ className, ...props }: React.ComponentProps<"p">) => (
     <p className={cn("leading-relaxed not-first:mt-6", className)} {...props} />
   ),
-  blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (
-    <blockquote />
+  strong: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
+    <strong className={cn("font-medium", className)} {...props} />
+  ),
+  ul: ({ className, ...props }: React.ComponentProps<"ul">) => (
+    <ul className={cn("my-6 ml-6 list-disc", className)} {...props} />
+  ),
+  ol: ({ className, ...props }: React.ComponentProps<"ol">) => (
+    <ol className={cn("my-6 ml-6 list-decimal", className)} {...props} />
+  ),
+  li: ({ className, ...props }: React.ComponentProps<"li">) => (
+    <li className={cn("mt-2", className)} {...props} />
   ),
   table: ({ className, ...props }: React.ComponentProps<"table">) => (
-    <div className="w-full overflow-x-auto rounded-md border border-[hsl(var(--border))]">
+    <div className="no-scrollbar my-6 w-full overflow-y-auto rounded-lg border border-[hsl(var(--border))]">
       <table
-        className={cn("w-full border-collapse text-sm", className)}
+        className={cn(
+          "relative w-full overflow-hidden border-none text-sm [&_tbody_tr:last-child]:border-b-0",
+          className
+        )}
         {...props}
       />
     </div>
   ),
-  thead: ({ className, ...props }: React.ComponentProps<"thead">) => (
-    <thead
-      className={cn(
-        "border-b border-b-[hsl(var(--border))] bg-[hsl(var(--background-elevated-1))]",
-        className
-      )}
-      {...props}
-    />
-  ),
-  tbody: ({ className, ...props }: React.ComponentProps<"tbody">) => (
-    <tbody className={cn("", className)} {...props} />
-  ),
   tr: ({ className, ...props }: React.ComponentProps<"tr">) => (
     <tr
-      className={cn(
-        "border-b border-b-[hsl(var(--border))] hover:bg-[hsl(var(--muted))]",
-        className
-      )}
+      className={cn("m-0 border-b border-b-[hsl(var(--border))]", className)}
       {...props}
     />
   ),
   th: ({ className, ...props }: React.ComponentProps<"th">) => (
     <th
       className={cn(
-        "text-foreground px-4 py-2 text-left font-semibold",
+        "bg-[hsl(var(--background-elevated-1))] px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right",
         className
       )}
       {...props}
     />
   ),
   td: ({ className, ...props }: React.ComponentProps<"td">) => (
-    <td className={cn("text-foreground px-4 py-2", className)} {...props} />
+    <td
+      className={cn(
+        "px-4 py-2 text-left whitespace-nowrap [&[align=center]]:text-center [&[align=right]]:text-right",
+        className
+      )}
+      {...props}
+    />
   ),
   pre: ({ className, children, ...props }: React.ComponentProps<"pre">) => {
     return (
       <pre
         className={cn(
-          "min-w-0 overflow-x-auto px-4 outline-none has-[[data-highlighted-line]]:px-0 has-[[data-line-numbers]]:px-0 has-[[data-slot=tabs]]:p-0 [&_code]:w-full [&_code]:overflow-x-auto [&_code]:py-3.5 [&>div]:border-b [&>div]:border-b-[hsl(var(--border))]",
+          "no-scrollbar min-w-0 overflow-x-auto px-4 py-3.5 pt-0 outline-none has-[[data-highlighted-line]]:px-0 has-[[data-line-numbers]]:px-0 has-[[data-slot=tabs]]:p-0",
           className
         )}
         {...props}

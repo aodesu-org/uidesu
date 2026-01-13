@@ -1,15 +1,10 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
+import { cn } from "@/lib/utils"
 
-
-import { cn } from "@/lib/utils";
-
-
-
-import { Button } from "./button";
-
+import { Button } from "./button"
 
 interface TabsContextValue {
   value: string
@@ -88,10 +83,7 @@ function TabsList({ className, children, ...props }: TabsListProps) {
     <div
       data-slot="tabs-list"
       role="tablist"
-      className={cn(
-        "flex gap-2",
-        className
-      )}
+      className={cn("flex gap-2", className)}
       {...props}
     >
       {children}
@@ -144,9 +136,7 @@ function TabsTrigger({
       onClick={() => {
         if (!disabled) onValueChange(value)
       }}
-      className={cn(
-        className
-      )}
+      className={cn(className)}
       {...props}
     >
       {children}
@@ -214,5 +204,4 @@ function SimpleTabs({
   )
 }
 
-export { SimpleTabs, Tabs, TabsContent, TabsList, TabsTrigger };
-
+export { SimpleTabs, Tabs, TabsContent, TabsList, TabsTrigger }

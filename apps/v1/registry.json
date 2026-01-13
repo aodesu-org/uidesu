@@ -11,6 +11,17 @@
   ],
   "items": [
     {
+      "name": "utils",
+      "type": "registry:lib",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "registry/aodesu/lib/utils.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "index",
       "type": "registry:style",
       "dependencies": [

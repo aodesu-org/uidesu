@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.aodesu.com/schema/registry-item.json",
+  "name": "avatar-demo",
+  "type": "registry:example",
+  "registryDependencies": [
+    "avatar"
+  ],
+  "files": [
+    {
+      "path": "registry/aodesu/examples/avatar/avatar-demo.tsx",
+      "content": "import Avatar from \"@/registry/aodesu/ui/avatar\"\n\nexport default function AvatarDemo() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-6\">\n      <Avatar src=\"https://github.com/sergiocortes-dll.png\" />\n\n      <Avatar src=\"https://github.com/colp-code.png\" className=\"rounded-lg\" />\n    </div>\n  )\n}\n",
+      "type": "registry:example"
+    }
+  ]
+}
