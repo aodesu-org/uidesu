@@ -3,7 +3,7 @@ export const FRAMEWORKS = {
     name: "next-app",
     label: "Next.js",
     links: {
-      installation: "https://ui.aodesu.com/docs/installation/next",
+      installation: "https://ui.uidesu.com/docs/installation/next",
       tailwind: "https://tailwindcss.com/docs/guides/nextjs",
     },
   },
@@ -11,15 +11,15 @@ export const FRAMEWORKS = {
     name: "next-pages",
     label: "Next.js",
     links: {
-      installation: "https://ui.aodesu.com/docs/installation/next",
+      installation: "https://ui.uidesu.com/docs/installation/next",
       tailwind: "https://tailwindcss.com/docs/guides/nextjs",
     },
   },
   vite: {
     name: "vite",
-    label: "vite",
+    label: "Vite",
     links: {
-      installation: "https://ui.aodesu.com/docs/installation/vite",
+      installation: "https://ui.uidesu.com/docs/installation/vite",
       tailwind: "https://tailwindcss.com/docs/guides/vite",
     },
   },
@@ -27,10 +27,10 @@ export const FRAMEWORKS = {
     name: "manual",
     label: "Manual",
     links: {
-      installation: "https://ui.aodesu.com/docs/installation/manual",
+      installation: "https://ui.uidesu.com/docs/installation/manual",
       tailwind: "https://tailwindcss.com/docs/installation",
     },
   },
-} as const;
+}
 
-export type Framework = (typeof FRAMEWORKS)[keyof typeof FRAMEWORKS];
+export type Framework = (typeof FRAMEWORKS)[keyof typeof FRAMEWORKS]

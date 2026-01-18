@@ -5,7 +5,7 @@ import { Copy } from "lucide-react";
 
 
 import { useTranslations } from "@/hooks/use-translations";
-import { Button } from "@/registry/aodesu/ui/button";
+import Button from "@/registry/ui/button";
 
 
 

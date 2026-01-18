@@ -1,15 +1,16 @@
 import LanguageSwitcher from "@/components/language-switcher";
-import { ThemeProvider } from "@/components/theme-provider";
 import { LayoutProvider } from "@/hooks/use-layout";
 import { META_THEME_COLORS } from "@/lib/config";
 import { i18n } from "@/lib/i18n";
+import { ThemeProvider } from "@/src/components/theme-provider";
 
 
 
 
 
 
-import "@/registry/aodesu/themes/dark.css";
+import "@/styles/aodesu/dark.css";
+import "@/styles/aodesu/light.css";
 import "@/styles/globals.css";
 
 

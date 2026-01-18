@@ -8,12 +8,12 @@
   "license": "MIT",
   "author": {
     "name": "sergiocortes-dll",
-    "url": "https://twitter.com/sergiocortes-dll"
+    "url": "https://x.com/sergiocortes-dll"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/aodesu/ui-cli.git",
-    "directory": "packages/aodesu"
+    "url": "https://github.com/aodesu-org/uidesu",
+    "directory": "packages/uidesu"
   },
   "files": [
     "dist"
@@ -34,6 +34,13 @@
     "./schema": {
       "types": "./dist/schema/index.d.ts",
       "default": "./dist/schema/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "default": "./dist/utils/index.js"
+    },
+    "./tailwind.css": {
+      "style": "./dist/tailwind.css"
     }
   },
   "bin": "./dist/index.js",

@@ -1,4 +1,5 @@
-import { defineConfig } from 'tsup';
+import { copyFileSync } from "fs"
+import { defineConfig } from "tsup"
 
 export default defineConfig({
   clean: true,
@@ -8,6 +9,7 @@ export default defineConfig({
     "src/registry/index.ts",
     "src/schema/index.ts",
     "src/mcp/index.ts",
+    "src/utils/index.ts",
   ],
   format: ["esm"],
   sourcemap: true,
@@ -15,4 +17,7 @@ export default defineConfig({
   target: 'esnext',
   outDir: "dist",
   treeshake: true,
+  onSuccess: async () => {
+    copyFileSync("src/tailwind.css", "dist/tailwind.css")
+  },
 })

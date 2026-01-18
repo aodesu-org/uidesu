@@ -4,144 +4,213 @@
   "styles": [
     {
       "name": "aodesu",
-      "label": "aodesu",
-      "description": "Estilo original.",
+      "label": "Aodesu",
+      "description": "aodesu style",
       "themes": ["dark", "light"]
     }
   ],
   "items": [
     {
-      "name": "utils",
-      "type": "registry:lib",
-      "dependencies": ["clsx", "tailwind-merge"],
+      "name": "avatar",
+      "type": "registry:ui",
       "files": [
         {
-          "path": "registry/aodesu/lib/utils.ts",
-          "type": "registry:lib"
+          "path": "ui/avatar.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { ComponentPropsWithoutRef } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\ninterface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {}\n\nfunction getInitials(name: string | undefined | null): string {\n  if (!name || typeof name !== \"string\") return \"??\"\n\n  const cleanedName = name.trim()\n  if (cleanedName.length === 0) return \"??\"\n\n  const nameParts = cleanedName.split(/\\s+/).filter((part) => part.length > 0)\n\n  if (nameParts.length === 0) return \"??\"\n\n  if (nameParts.length === 1) {\n    return cleanedName.slice(0, 2).toUpperCase()\n  }\n\n  return (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()\n}\n\ninterface AvatarProps {\n  className?: string\n  imageProps?: ComponentPropsWithoutRef<\"img\">\n  fallbackProps?: ComponentPropsWithoutRef<\"div\">\n  alt?: string\n  src?: string\n}\n\nexport default function Avatar({\n  className,\n  imageProps,\n  fallbackProps,\n  alt,\n  src,\n  ...props\n}: AvatarProps & ComponentPropsWithoutRef<\"div\">) {\n  return (\n    <AvatarContainer className={className} {...props}>\n      <AvatarImage src={src} alt={alt} {...imageProps} />\n      <AvatarFallback {...fallbackProps}>{getInitials(alt)}</AvatarFallback>\n    </AvatarContainer>\n  )\n}\n\nfunction AvatarContainer({ className, ...props }: AvatarProps) {\n  return (\n    <div\n      data-slot=\"avatar\"\n      className={cn(\n        \"relative flex size-8 shrink-0 overflow-hidden rounded-full\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\ninterface AvatarImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {}\n\nfunction AvatarImage({\n  className,\n  onLoad,\n  onError,\n  ...props\n}: AvatarImageProps) {\n  const [hasError, setHasError] = React.useState(false)\n  const { alt } = props\n\n  // Reset error state when src changes\n  React.useEffect(() => {\n    setHasError(false)\n  }, [props.src])\n\n  if (hasError) {\n    return null\n  }\n\n  return (\n    <img\n      data-slot=\"avatar-image\"\n      className={cn(\"aspect-square size-full object-cover\", className)}\n      alt={alt ?? \"\"}\n      onLoad={onLoad}\n      onError={(e) => {\n        setHasError(true)\n        onError?.(e)\n      }}\n      {...props}\n    />\n  )\n}\n\ninterface AvatarFallbackProps extends React.HTMLAttributes<HTMLDivElement> {\n  delayMs?: number\n}\n\nfunction AvatarFallback({\n  className,\n  delayMs = 0,\n  children,\n  ...props\n}: AvatarFallbackProps) {\n  const [isVisible, setIsVisible] = React.useState(delayMs === 0)\n\n  React.useEffect(() => {\n    if (delayMs > 0) {\n      const timer = setTimeout(() => setIsVisible(true), delayMs)\n      return () => clearTimeout(timer)\n    }\n  }, [delayMs])\n\n  if (!isVisible) {\n    return null\n  }\n\n  return (\n    <div\n      data-slot=\"avatar-fallback\"\n      className={cn(\n        \"bg-muted flex size-full items-center justify-center rounded-full\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </div>\n  )\n}\n\nexport { AvatarContainer, AvatarFallback, AvatarImage }\n"
         }
       ]
     },
     {
-      "name": "index",
-      "type": "registry:style",
-      "dependencies": [
-        "class-variance-authority",
-        "lucide-react"
-      ],
-      "devDependencies": [
-        "tw-animate-css"
-      ],
-      "registryDependencies": [
-        "utils"
-      ],
-      "files": [],
-      "cssVars": {}
-    },
-    {
-      "name": "style",
-      "type": "registry:style",
-      "dependencies": [
-        "class-variance-authority",
-        "lucide-react"
-      ],
-      "devDependencies": [
-        "tw-animate-css"
-      ],
-      "registryDependencies": [
-        "utils"
-      ],
-      "files": [],
-      "cssVars": {}
-    },
-    {
-      "name": "theme-aodesu-light",
-      "type": "registry:theme",
-      "style": "aodesu",
-      "theme": "light",
-      "cssSelector": "[data-style=\"aodesu\"][data-theme=\"light\"]",
-      "cssVars": {
-        "--font-branch": "\"Charm\", cursive",
-        "--background": "0 0% 96%",
-        "--background-elevated-1": "0 0% 97.5%",
-        "--background-elevated-2": "0 0% 100%",
-        "--foreground": "0 0% 0%",
-        "--foreground-light": "0 0% 10%",
-        "--inverse-foreground": "0 0% 100%",
-        "--sandbox-bg": "0 0% 100%",
-        "--neutral": "0 0% 80%",
-        "--neutral-dark": "0 0% 90%",
-        "--neutral-light": "0 0% 70%",
-        "--primary": "225 72% 57%",
-        "--primary-foreground": "0 0% 100%",
-        "--primary-dark": "225 55% 45%",
-        "--primary-light": "225 68% 61%",
-        "--secondary": "258 72% 61%",
-        "--secondary-dark": "258 45% 49%",
-        "--secondary-light": "258 72% 68%",
-        "--secondary-foreground": "0 0% 100%",
-        "--contrast": "0 0% 20%",
-        "--contrast-light": "0 0% 10%",
-        "--contrast-dark": "0 0% 30%",
-        "--border": "0 0% 85%",
-        "--border-outline": "0 0% 85%",
-        "--ghost-neutral-bg": "0 0% 0%",
-        "--ghost-neutral-bg-h": "0 0% 90%",
-        "--ghost-contrast-foreground": "0 0% 93%",
-        "--ghost-contrast-bg": "0 0% 13%",
-        "--ghost-contrast-bg-h": "0 0% 20%",
-        "--text-neutral": "0 0% 35%",
-        "--text-neutral-h": "0 0% 10%",
-        "--text-neutral-active": "0 0% 5%"
-      }
-    },
-    {
-      "name": "theme-aodesu-dark",
-      "type": "registry:theme",
-      "style": "aodesu",
-      "theme": "dark",
-      "cssSelector": "[data-style=\"aodesu\"][data-theme=\"dark\"]",
-      "cssVars": {
-        "--font-branch": "\"Charm\", cursive",
-        "--background": "0 0% 4%",
-        "--background-elevated-1": "0 0% 5%",
-        "--background-elevated-2": "0 0% 8.5%",
-        "--foreground": "0 0% 80%",
-        "--foreground-light": "0 0% 100%",
-        "--inverse-foreground": "0 0% 10%",
-        "--sandbox-bg": "0 0% 3%",
-        "--neutral": "0 0% 20%",
-        "--neutral-dark": "0 0% 14%",
-        "--neutral-light": "0 0% 27%",
-        "--primary": "225 72% 57%",
-        "--primary-dark": "225 55% 45%",
-        "--primary-light": "225 68% 61%",
-        "--primary-foreground": "0 0% 100%",
-        "--secondary": "258 72% 61%",
-        "--secondary-dark": "258 45% 49%",
-        "--secondary-light": "258 72% 68%",
-        "--secondary-foreground": "0 0% 100%",
-        "--contrast": "0 0% 80%",
-        "--contrast-light": "0 0% 95%",
-        "--contrast-dark": "0 0% 70%",
-        "--border": "0 0% 15%",
-        "--border-outline": "0 0% 20%",
-        "--popover": "0 0% 15%",
-        "--popover-foreground": "0 0% 90%"
-      }
-    },
-    {
-      "name": "avatar",
+      "name": "button",
       "type": "registry:ui",
-      "availableStyles": ["aodesu"],
       "files": [
         {
-          "path": "registry/aodesu/ui/avatar.tsx",
+          "path": "ui/button.tsx",
           "type": "registry:ui",
-          "style": "aodesu",
-          "themes": ["light", "dark"]
+          "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { Slot } from \"@/lib/slot\"\nimport { cn } from \"@/lib/utils\"\n\n/* ---------------------------------------------\n   Tipos\n--------------------------------------------- */\n\ntype ButtonVariant = \"ghost\" | \"contained\" | \"outlined\" | \"text\"\ntype ButtonColor = \"neutral\" | \"primary\" | \"secondary\" | \"contrast\"\ntype ButtonSize = \"small\" | \"medium\" | \"big\"\n\nexport interface ButtonProps\n  extends React.ButtonHTMLAttributes<HTMLButtonElement> {\n  variant?: ButtonVariant\n  color?: ButtonColor\n  size?: ButtonSize\n  icon?: boolean\n  asChild?: boolean\n  loading?: boolean\n  fullWidth?: boolean\n}\n\n/* ---------------------------------------------\n   Clases base\n--------------------------------------------- */\n\nconst baseClasses =\n  \"relative overflow-hidden inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium shrink-0 outline-none transition-transform transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-[3px] focus-visible:ring-ring/50 [&_svg]:text-[1.5em] [&_svg]:w-[1em] [&_svg]:h-[1em]\"\n\n/* ---------------------------------------------\n   Sizes\n--------------------------------------------- */\n\nconst sizeClasses: Record<ButtonSize, string> = {\n  small: \"rounded-md px-3 py-1.5 [&_svg]:size-4\",\n  medium: \"rounded-lg px-4 py-2 [&_svg]:size-5\",\n  big: \"rounded-xl px-6 py-3 [&_svg]:size-5\",\n}\n\nconst iconSizeClasses: Record<ButtonSize, string> = {\n  small: \"size-8 rounded-md p-2\",\n  medium: \"size-10 rounded-lg p-0\",\n  big: \"size-12 rounded-xl p-0\",\n}\n\n/* ---------------------------------------------\n   Variants base\n--------------------------------------------- */\n\nconst variantBaseClasses: Record<ButtonVariant, string> = {\n  ghost: \"\",\n  contained: \"\",\n  outlined: \"border border-[hsl(var(--neutral-dark))]\",\n  text: \"!py-0 !px-0.5 !text-[1em] leading-none !h-lh !rounded-full ring-4 ring-transparent\",\n}\n\n/* ---------------------------------------------\n   Colores por variante\n--------------------------------------------- */\n\nconst variantColorMap = {\n  ghost: {\n    neutral:\n      \"hover:bg-[hsl(var(--neutral-dark))] active:bg-[hsl(var(--neutral))]\",\n    primary:\n      \"text-[hsl(var(--primary-light))] hover:bg-[hsl(var(--primary))] hover:text-[hsl(var(--primary-foreground))] active:bg-[hsl(var(--primary-light))]\",\n    secondary:\n      \"text-[hsl(var(--secondary-light))] hover:bg-[hsl(var(--secondary))] hover:text-[hsl(var(--secondary-foreground))] active:bg-[hsl(var(--secondary-light))]\",\n    contrast:\n      \"hover:bg-[hsl(var(--contrast-light))] hover:text-[hsl(var(--inverse-foreground))] active:bg-[hsl(var(--contrast))]\",\n  },\n  contained: {\n    neutral:\n      \"bg-[hsl(var(--neutral-dark))] hover:bg-[hsl(var(--neutral))] active:bg-[hsl(var(--neutral-light))]\",\n    primary:\n      \"bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--primary-dark))] active:bg-[hsl(var(--primary-light))]\",\n    secondary:\n      \"bg-[hsl(var(--secondary))] text-[hsl(var(--secondary-foreground))] hover:bg-[hsl(var(--secondary-dark))] active:bg-[hsl(var(--secondary-light))]\",\n    contrast:\n      \"text-[hsl(var(--inverse-foreground))] bg-[hsl(var(--contrast-light))] hover:bg-[hsl(var(--contrast))] active:bg-[hsl(var(--contrast-dark))]\",\n  },\n  outlined: {\n    neutral:\n      \"border-[hsl(var(--neutral-dark))] hover:bg-[hsl(var(--neutral-dark))] active:bg-[hsl(var(--neutral))]\",\n    primary:\n      \"text-[hsl(var(--primary-light))] border-[hsl(var(--primary-dark))] hover:bg-[hsl(var(--primary-dark))] hover:text-[hsl(var(--primary-foreground))]\",\n    secondary:\n      \"text-[hsl(var(--secondary-light))] border-[hsl(var(--secondary-dark))] hover:bg-[hsl(var(--secondary-dark))] hover:text-[hsl(var(--secondary-foreground))]\",\n    contrast:\n      \"border-[hsl(var(--foreground)/.7)] hover:bg-[hsl(var(--neutral-dark))]\",\n  },\n  text: {\n    neutral:\n      \"text-[hsl(var(--foreground-light))] hover:bg-[hsl(var(--neutral-dark))]\",\n    primary:\n      \"text-[hsl(var(--primary-light))] hover:bg-[hsl(var(--primary-light)/.15)]\",\n    secondary:\n      \"text-[hsl(var(--secondary-light))] hover:bg-[hsl(var(--secondary-light)/.15)]\",\n    contrast:\n      \"text-[hsl(var(--primary-light))] hover:bg-[hsl(var(--primary-light)/.15)]\",\n  },\n} as const\n\n/* ---------------------------------------------\n   Active behaviors\n--------------------------------------------- */\n\nconst activeIconClasses = \"active:[&_svg]:scale-90\"\nconst activeNormalClasses = \"active:opacity-70\"\n\n/* ---------------------------------------------\n   Button\n--------------------------------------------- */\n\nexport default function Button({\n  className,\n  variant = \"ghost\",\n  color = \"neutral\",\n  size = \"medium\",\n  icon,\n  asChild,\n  loading,\n  children,\n  fullWidth,\n  ...props\n}: ButtonProps) {\n  const isIconButton =\n    icon ??\n    (React.Children.count(children) === 1 &&\n      React.isValidElement(children) &&\n      children.type === \"svg\")\n\n  const composedClassName = cn(\n    baseClasses,\n    fullWidth && \"w-full\",\n    variantBaseClasses[variant],\n    variantColorMap[variant][color],\n    isIconButton ? iconSizeClasses[size] : sizeClasses[size],\n    isIconButton ? activeIconClasses : activeNormalClasses,\n    className\n  )\n\n  if (asChild && React.isValidElement(children)) {\n    return (\n      <Slot data-slot=\"button\" className={composedClassName} {...props}>\n        {children}\n      </Slot>\n    )\n  }\n\n  return (\n    <button\n      data-slot=\"button\"\n      className={composedClassName}\n      disabled={loading || props.disabled}\n      {...props}\n    >\n      <span\n        className={cn(\n          \"flex items-center justify-center gap-2 transition-transform duration-300\",\n          loading && \"-translate-y-[200%]\"\n        )}\n      >\n        {children}\n      </span>\n      <span\n        className={cn(\n          \"absolute inset-0 flex items-center justify-center transition-transform duration-300\",\n          loading ? \"translate-y-0\" : \"translate-y-[200%]\"\n        )}\n      >\n        <svg\n          className=\"animate-spin\"\n          xmlns=\"http://www.w3.org/2000/svg\"\n          width=\"1em\"\n          height=\"1em\"\n          viewBox=\"0 0 24 24\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          strokeWidth=\"2\"\n          strokeLinecap=\"round\"\n          strokeLinejoin=\"round\"\n        >\n          <path d=\"M21 12a9 9 0 1 1-6.219-8.56\" />\n        </svg>\n      </span>\n    </button>\n  )\n}\n"
         }
-      ],
-      "dependencies": ["@radix-ui/react-slot"]
-    }
-  ]
-}
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "files": [
+        {
+          "path": "ui/tabs.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nimport Button from \"./button\"\n\ninterface TabsContextValue {\n  value: string\n  onValueChange: (value: string) => void\n}\n\nconst TabsContext = React.createContext<TabsContextValue | undefined>(undefined)\n\nfunction useTabs() {\n  const context = React.useContext(TabsContext)\n  if (!context) {\n    throw new Error(\"Tabs components must be used within a Tabs component\")\n  }\n  return context\n}\n\ninterface TabsProps {\n  value: string\n  onValueChange: (value: string) => void\n  className?: string\n  children: React.ReactNode\n  defaultValue?: string\n}\n\nexport default function Tabs({\n  value,\n  onValueChange,\n  className,\n  children,\n  defaultValue,\n  ...props\n}: TabsProps) {\n  const [internalValue, setInternalValue] = React.useState(defaultValue || \"\")\n\n  const isControlled = value !== undefined\n  const currentValue = isControlled ? value : internalValue\n\n  const handleValueChange = React.useCallback(\n    (newValue: string) => {\n      if (!isControlled) {\n        setInternalValue(newValue)\n      }\n      onValueChange?.(newValue)\n    },\n    [isControlled, onValueChange]\n  )\n\n  const contextValue = React.useMemo(\n    () => ({\n      value: currentValue,\n      onValueChange: handleValueChange,\n    }),\n    [currentValue, handleValueChange]\n  )\n\n  return (\n    <TabsContext.Provider value={contextValue}>\n      <div\n        data-slot=\"tabs\"\n        className={cn(\"flex flex-col gap-2\", className)}\n        {...props}\n      >\n        {children}\n      </div>\n    </TabsContext.Provider>\n  )\n}\n\ninterface TabsListProps {\n  className?: string\n  children: React.ReactNode\n}\n\nfunction TabsList({ className, children, ...props }: TabsListProps) {\n  return (\n    <div\n      data-slot=\"tabs-list\"\n      role=\"tablist\"\n      className={cn(\"flex gap-2\", className)}\n      {...props}\n    >\n      {children}\n    </div>\n  )\n}\n\ninterface TabsTriggerProps {\n  value: string\n  className?: string\n  children: React.ReactNode\n  disabled?: boolean\n}\n\nfunction TabsTrigger({\n  value,\n  className,\n  children,\n  disabled = false,\n  ...props\n}: TabsTriggerProps) {\n  const { value: selectedValue, onValueChange } = useTabs()\n  const isSelected = selectedValue === value\n\n  const handleClick = () => {\n    if (!disabled) {\n      onValueChange(value)\n    }\n  }\n\n  const handleKeyDown = (event: React.KeyboardEvent) => {\n    if (event.key === \"Enter\" || event.key === \" \") {\n      event.preventDefault()\n      if (!disabled) {\n        onValueChange(value)\n      }\n    }\n  }\n\n  return (\n    <Button\n      data-slot=\"tabs-trigger\"\n      role=\"tab\"\n      aria-selected={isSelected}\n      aria-controls={`tab-content-${value}`}\n      tabIndex={isSelected ? 0 : -1}\n      disabled={disabled}\n      variant={isSelected ? \"contained\" : \"ghost\"}\n      size=\"small\"\n      onClick={() => {\n        if (!disabled) onValueChange(value)\n      }}\n      className={cn(className)}\n      {...props}\n    >\n      {children}\n    </Button>\n  )\n}\n\ninterface TabsContentProps {\n  value: string\n  className?: string\n  children: React.ReactNode\n}\n\nfunction TabsContent({\n  value,\n  className,\n  children,\n  ...props\n}: TabsContentProps) {\n  const { value: selectedValue } = useTabs()\n  const isSelected = selectedValue === value\n\n  if (!isSelected) {\n    return null\n  }\n\n  return (\n    <div\n      data-slot=\"tabs-content\"\n      role=\"tabpanel\"\n      id={`tab-content-${value}`}\n      aria-labelledby={`tab-trigger-${value}`}\n      className={cn(\"flex-1 outline-none\", className)}\n      {...props}\n    >\n      {children}\n    </div>\n  )\n}\n\n// Versión con estado interno automático (opcional)\ninterface SimpleTabsProps {\n  defaultValue: string\n  className?: string\n  children: React.ReactNode\n}\n\nfunction SimpleTabs({\n  defaultValue,\n  className,\n  children,\n  ...props\n}: SimpleTabsProps) {\n  const [value, setValue] = React.useState(defaultValue)\n\n  return (\n    <Tabs\n      value={value}\n      onValueChange={setValue}\n      className={className}\n      {...props}\n    >\n      {children}\n    </Tabs>\n  )\n}\n\nexport { SimpleTabs, Tabs, TabsContent, TabsList, TabsTrigger }\n"
+        }
+      ]
+    },
+    {
+      "name": "slot",
+      "type": "registry:lib",
+      "files": [
+        {
+          "path": "utils/slot.tsx",
+          "type": "registry:lib",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport interface SlotProps extends React.HTMLAttributes<HTMLElement> {\n  children: React.ReactElement\n}\n\nexport const Slot = React.forwardRef<HTMLElement, SlotProps>(\n  ({ children, className, ...props }, ref) => {\n    if (!React.isValidElement(children)) return null\n\n    return React.cloneElement(children, {\n      ...props,\n      ref,\n      className: cn(className, (children as any).props?.className),\n    } as any) as React.ReactElement & { ref: React.Ref<HTMLElement> }\n  }\n)\n\nSlot.displayName = \"Slot\"\n"
+        }
+      ]
+    },
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "files": [
+        {
+          "path": "utils/utils.ts",
+          "type": "registry:lib",
+          "content": "import { clsx, type ClassValue } from \"clsx\"\nimport { twMerge } from \"tailwind-merge\"\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n\nexport function absoluteUrl(path: string) {\n  return `${process.env.NEXT_PUBLIC_APP_URL}${path}`\n}\n\nexport function getLocalizedUrl(url: string, targetLocale: string) {\n  return url.replace(/^\\/(en|es)(\\/|$)/, `/${targetLocale}$2`)\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "theme-provider",
+      "type": "registry:item",
+      "files": [
+        {
+          "path": "providers/theme-provider.css",
+          "type": "registry:file",
+          "target": "styles/",
+          "content": "@import \"tailwindcss\";\r\n@import \"tw-animate-css\";\r\n\r\n@layer base {\r\n  :root {\r\n    --background: 0 0% 100%;\r\n    --foreground: 222.2 84% 4.9%;\r\n    --card: 0 0% 100%;\r\n    --card-foreground: 222.2 84% 4.9%;\r\n    --popover: 0 0% 100%;\r\n    --popover-foreground: 222.2 84% 4.9%;\r\n    --primary: 222.2 47.4% 11.2%;\r\n    --primary-foreground: 210 40% 98%;\r\n    --secondary: 210 40% 96.1%;\r\n    --secondary-foreground: 222.2 47.4% 11.2%;\r\n    --muted: 210 40% 96.1%;\r\n    --muted-foreground: 215.4 16.3% 46.9%;\r\n    --accent: 210 40% 96.1%;\r\n    --accent-foreground: 222.2 47.4% 11.2%;\r\n    --destructive: 0 84.2% 60.2%;\r\n    --destructive-foreground: 210 40% 98%;\r\n    --border: 214.3 31.8% 91.4%;\r\n    --input: 214.3 31.8% 91.4%;\r\n    --ring: 222.2 84% 4.9%;\r\n  }\r\n\r\n  .dark {\r\n    --background: 222.2 84% 4.9%;\r\n    --foreground: 210 40% 98%;\r\n    --card: 222.2 84% 4.9%;\r\n    --card-foreground: 210 40% 98%;\r\n    --popover: 222.2 84% 4.9%;\r\n    --popover-foreground: 210 40% 98%;\r\n    --primary: 210 40% 98%;\r\n    --primary-foreground: 222.2 47.4% 11.2%;\r\n    --secondary: 217.2 32.6% 17.5%;\r\n    --secondary-foreground: 210 40% 98%;\r\n    --muted: 217.2 32.6% 17.5%;\r\n    --muted-foreground: 215 20.2% 65.1%;\r\n    --accent: 217.2 32.6% 17.5%;\r\n    --accent-foreground: 210 40% 98%;\r\n    --destructive: 0 62.8% 30.6%;\r\n    --destructive-foreground: 210 40% 98%;\r\n    --border: 217.2 32.6% 17.5%;\r\n    --input: 217.2 32.6% 17.5%;\r\n    --ring: 212.7 26.8% 83.9%;\r\n  }\r\n}\r\n"
+        },
+        {
+          "path": "providers/theme-provider.tsx",
+          "type": "registry:item",
+          "content": "\"use client\"\n\nimport React, {\n  createContext,\n  useContext,\n  useLayoutEffect,\n  useState,\n} from \"react\"\n\ntype Theme = string\n\ninterface ThemeContextType {\n  theme: Theme\n  setTheme: (theme: Theme) => void\n}\n\nconst ThemeContext = createContext<ThemeContextType | undefined>(undefined)\n\nexport function AodeSuThemeProvider({\n  children,\n  defaultTheme = \"light\",\n  availableThemes = [\"light\", \"dark\"],\n  storageKey = \"ui-theme\",\n  stylePath = \"/styles/aodesu\",\n}: {\n  children: React.ReactNode\n  defaultTheme?: Theme\n  availableThemes?: Theme[]\n  storageKey?: string\n  stylePath?: string\n}) {\n  const [theme, setThemeState] = useState<Theme>(() => {\n    if (typeof window === \"undefined\") return defaultTheme\n\n    const stored = localStorage.getItem(storageKey) as Theme | null\n    const system = window.matchMedia(\"(prefers-color-scheme: dark)\").matches\n      ? \"dark\"\n      : \"light\"\n    return stored || (availableThemes.includes(system) ? system : defaultTheme)\n  })\n\n  const applyTheme = (theme: Theme, stylePath: string) => {\n    const root = document.documentElement\n\n    // Remove all theme classes\n    availableThemes.forEach((t) => {\n      root.classList.remove(t)\n    })\n\n    // Add the new theme class\n    root.classList.add(theme)\n\n    // Import the appropriate theme CSS\n    const link = document.getElementById(\"theme-style\") as HTMLLinkElement\n    if (link) {\n      link.href = `${stylePath}/${theme}.css`\n    } else {\n      const newLink = document.createElement(\"link\")\n      newLink.id = \"theme-style\"\n      newLink.rel = \"stylesheet\"\n      newLink.href = `${stylePath}/${theme}.css`\n      document.head.appendChild(newLink)\n    }\n  }\n\n  useLayoutEffect(() => {\n    applyTheme(theme, stylePath)\n  }, [theme, stylePath, availableThemes])\n\n  const setTheme = (newTheme: Theme) => {\n    if (!availableThemes.includes(newTheme)) {\n      console.warn(\n        `Theme \"${newTheme}\" is not in availableThemes: ${availableThemes.join(\", \")}`\n      )\n      return\n    }\n\n    setThemeState(newTheme)\n    localStorage.setItem(storageKey, newTheme)\n    applyTheme(newTheme, stylePath)\n  }\n\n  return (\n    <ThemeContext.Provider value={{ theme, setTheme }}>\n      {children}\n    </ThemeContext.Provider>\n  )\n}\n\nexport function useAodeSuTheme() {\n  const context = useContext(ThemeContext)\n  if (context === undefined) {\n    throw new Error(\"useAodeSuTheme must be used within an AodeSuThemeProvider\")\n  }\n  return context\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "avatar-avatar-demo",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/avatar/avatar-demo.tsx",
+          "type": "registry:example",
+          "content": "import Avatar from \"@/registry/ui/avatar\"\n\nexport default function AvatarDemo() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-6\">\n      <Avatar src=\"https://github.com/sergiocortes-dll.png\" />\n\n      <Avatar src=\"https://github.com/colp-code.png\" className=\"rounded-lg\" />\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-colors",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-colors.tsx",
+          "type": "registry:example",
+          "content": "import Button from \"@/registry/ui/button\"\n\nexport default function ButtonColors() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button color=\"primary\">Primary</Button>\n      <Button color=\"secondary\">Secondary</Button>\n      <Button color=\"neutral\">Neutral</Button>\n      <Button color=\"contrast\">Contrast</Button>\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-contained",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-contained.tsx",
+          "type": "registry:example",
+          "content": "import Button from \"@/registry/ui/button\"\n\nexport default function ButtonContained() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button variant=\"contained\" color=\"primary\">\n        Primary\n      </Button>\n      <Button variant=\"contained\" color=\"secondary\">\n        Secondary\n      </Button>\n      <Button variant=\"contained\" color=\"neutral\">\n        Neutral\n      </Button>\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-demo",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-demo.tsx",
+          "type": "registry:example",
+          "content": "import Button from \"@/registry/ui/button\"\n\nexport default function ButtonDemo() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-6\">\n      <Button variant=\"ghost\" color=\"contrast\">\n        Botón\n      </Button>\n\n      <Button variant=\"contained\" color=\"primary\">\n        Botón\n      </Button>\n\n      <Button variant=\"outlined\" color=\"secondary\">\n        Botón\n      </Button>\n\n      <Button variant=\"text\">Botón</Button>\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-disabled",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-disabled.tsx",
+          "type": "registry:example",
+          "content": "import Button from \"@/registry/ui/button\"\n\nexport default function ButtonDisabled() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button disabled>Deshabilitado</Button>\n      <Button variant=\"contained\" color=\"primary\" disabled>\n        Deshabilitado\n      </Button>\n      <Button variant=\"outlined\" disabled>\n        Deshabilitado\n      </Button>\n      <Button variant=\"text\" disabled>\n        Deshabilitado\n      </Button>\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-ghost",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-ghost.tsx",
+          "type": "registry:example",
+          "content": "import Button from \"@/registry/ui/button\"\n\nexport default function ButtonGhost() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button variant=\"ghost\" color=\"primary\">\n        Primary\n      </Button>\n      <Button variant=\"ghost\" color=\"secondary\">\n        Secondary\n      </Button>\n      <Button variant=\"ghost\" color=\"neutral\">\n        Neutral\n      </Button>\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-icon",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-icon.tsx",
+          "type": "registry:example",
+          "content": "import { Bell, Bookmark, Heart, Search, Settings, Share } from \"lucide-react\"\n\nimport Button from \"@/registry/ui/button\"\n\nexport default function ButtonIcon() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button icon variant=\"ghost\">\n        <Heart />\n      </Button>\n      <Button icon variant=\"contained\" color=\"primary\">\n        <Share />\n      </Button>\n      <Button icon variant=\"outlined\" color=\"secondary\">\n        <Bookmark />\n      </Button>\n      <Button icon variant=\"ghost\" color=\"primary\">\n        <Bell />\n      </Button>\n      <Button icon variant=\"contained\" color=\"secondary\">\n        <Settings />\n      </Button>\n      <Button icon variant=\"outlined\">\n        <Search />\n      </Button>\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-loading",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-loading.tsx",
+          "type": "registry:example",
+          "content": "\"use client\"\n\nimport React from \"react\"\n\nimport Button from \"@/registry/ui/button\"\n\nexport default function ButtonLoading() {\n  const [loading, setLoading] = React.useState<boolean>(false)\n  return (\n    <div className=\"flex flex-col gap-4\">\n      <div className=\"w-full border-b border-b-[hsl(var(--border))] pb-4\">\n        <Button\n          onClick={() => setLoading(!loading)}\n          variant=\"outlined\"\n          fullWidth\n        >\n          {loading ? \"Desactivar\" : \"Activar\"}\n        </Button>\n      </div>\n      <div className=\"flex flex-wrap items-center gap-4\">\n        <Button loading={loading}>Botón 1</Button>\n        <Button variant=\"contained\" color=\"primary\" loading={loading}>\n          Botón 2\n        </Button>\n        <Button variant=\"outlined\" loading={loading}>\n          Botón 3\n        </Button>\n      </div>\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-outlined",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-outlined.tsx",
+          "type": "registry:example",
+          "content": "import Button from \"@/registry/ui/button\"\n\nexport default function ButtonOutlined() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button variant=\"outlined\" color=\"primary\">\n        Primary\n      </Button>\n      <Button variant=\"outlined\" color=\"secondary\">\n        Secondary\n      </Button>\n      <Button variant=\"outlined\" color=\"neutral\">\n        Neutral\n      </Button>\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-sizes",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-sizes.tsx",
+          "type": "registry:example",
+          "content": "import Button from \"@/registry/ui/button\"\n\nexport default function ButtonSizes() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button variant=\"contained\" size=\"small\">\n        Small\n      </Button>\n      <Button variant=\"contained\" size=\"medium\">\n        Medium\n      </Button>\n      <Button variant=\"contained\" size=\"big\">\n        Big\n      </Button>\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-text",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-text.tsx",
+          "type": "registry:example",
+          "content": "import Button from \"@/registry/ui/button\"\n\nexport default function ButtonText() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button variant=\"text\" color=\"primary\">\n        Text\n      </Button>\n      <Button variant=\"text\" color=\"secondary\">\n        Secondary\n      </Button>\n      <Button variant=\"text\" color=\"neutral\">\n        Neutral\n      </Button>\n    </div>\n  )\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "button-button-with-icon",
+      "type": "registry:example",
+      "files": [
+        {
+          "path": "examples/button/button-with-icon.tsx",
+          "type": "registry:example",
+          "content": "import { Download, Plus, Send, Upload } from \"lucide-react\"\n\nimport Button from \"@/registry/ui/button\"\n\nexport default function ButtonWithIcon() {\n  return (\n    <div className=\"flex flex-row flex-wrap items-center gap-4\">\n      <Button variant=\"contained\">\n        <Send />\n        Enviar\n      </Button>\n      <Button variant=\"outlined\" color=\"primary\">\n        <Download />\n        Descargar\n      </Button>\n      <Button variant=\"ghost\" color=\"secondary\">\n        <Upload />\n        Subir\n      </Button>\n      <Button variant=\"contained\" color=\"primary\">\n        <Plus />\n        Crear\n      </Button>\n    </div>\n  )\n}\n"
+        }
+      ]
+ot"]

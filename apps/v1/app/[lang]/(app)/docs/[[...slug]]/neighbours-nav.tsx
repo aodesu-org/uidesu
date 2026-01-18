@@ -5,7 +5,7 @@ import Link from "next/link"
 
 import { useTranslations } from "@/hooks/use-translations"
 import { getLocalizedUrl } from "@/lib/utils"
-import { Button } from "@/registry/aodesu/ui/button"
+import Button from "@/registry/ui/button"
 
 type Neighbour = { url: string; name: string }
 

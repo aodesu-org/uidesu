@@ -9,8 +9,8 @@ export async function loadEnvFiles(cwd: string = process.cwd()): Promise<void> {
       ".env.local",
       ".env.development.local",
       ".env.development",
-      ".env"
-    ];
+      ".env",
+    ]
 
     for (const envFile of envFiles) {
       const envPath = join(cwd, envFile);
@@ -19,7 +19,7 @@ export async function loadEnvFiles(cwd: string = process.cwd()): Promise<void> {
           path: envPath,
           overload: false,
           quiet: true
-        })
+        });
       }
     }
   } catch (error) {

@@ -1,4 +1,4 @@
-import { Button } from "@/registry/aodesu/ui/button";
+import Button from "@/registry/ui/button";
 import { AtSign, Copy, Send } from "lucide-react";
 
 export default function ActionButtons({ code }: { code: string }) {

@@ -5,7 +5,7 @@ import * as React from "react";
 
 
 import { useConfig } from "@/hooks/use-config";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/registry/aodesu/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/registry/ui/tabs";
 import { Terminal } from "lucide-react";
 
 

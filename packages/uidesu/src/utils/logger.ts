@@ -1,4 +1,4 @@
-import { highlighter } from "./highlighter";
+import { highlighter } from "@/src/utils/highlighter"
 
 export const logger = {
   error(...args: unknown[]) {
@@ -19,4 +19,4 @@ export const logger = {
   break() {
     console.log("")
   },
-};
+}

@@ -1,13 +1,9 @@
 import { Command } from "commander";
-import * as fs from "fs/promises";
-import * as path from "path";
+import { promises as fs } from "fs";
+import path from "path";
 import z from "zod";
-import { preFlightBuild } from "../preflights/preflight-build";
-import { registryItemSchema, registrySchema } from "../schema";
-import { handleError } from "../utils/handle-error";
-import { highlighter } from "../utils/highlighter";
+import { registrySchema } from "../registry/schema";
 import { logger } from "../utils/logger";
-import { spinner } from "../utils/spinner";
 
 export const buildOptionsSchema = z.object({
   cwd: z.string(),
@@ -29,73 +25,43 @@ export const build = new Command()
     "the working directory. defaults to the current directory.",
     process.cwd()
   )
-  .action(async (registry: string, opts) => {
+  .action(async (registryFile: string, opts) => {
     try {
-      const options = buildOptionsSchema.parse({
-        cwd: path.resolve(opts.cwd),
-        registryFile: registry,
-        outputDir: opts.output,
-      });
+      const cwd = path.resolve(opts.cwd);
+      const outputDir = path.resolve(cwd, opts.output);
+      const registryPath = path.resolve(cwd, registryFile);
 
-      const { resolvePaths } = await preFlightBuild(options);
-      const content = await fs.readFile(resolvePaths.registryFile, "utf-8");
+      // Read and parse registry
+      const registryContent = await fs.readFile(registryPath, "utf-8");
+      const registry = registrySchema.parse(JSON.parse(registryContent));
 
-      const result = registrySchema.safeParse(JSON.parse(content));
+      // Create output directory
+      await fs.mkdir(outputDir, { recursive: true });
 
-      if (!result.success) {
-        logger.error(
-          `Invalid registry file found at ${highlighter.info(
-            resolvePaths.registryFile
-          )}.`
-        );
-        process.exit(1);
-      }
+      // Generate index file with all items
+      const index = registry.items.map((item) => ({
+        name: item.name,
+        type: item.type,
+      }));
 
-      const buildSpinner = spinner("Building registry...");
-      for (const registryItem of result.data.items) {
-        buildSpinner.start(`Building ${registryItem.name}...`);
-
-        // Add the schema to the registry item.
-        registryItem["$schema"] =
-          "https://ui.aodesu.com/schema/registry-item.json";
-
-        // Loop through each file in the files array.
-        for (const file of registryItem.files ?? []) {
-          file["content"] = await fs.readFile(
-            path.resolve(resolvePaths.cwd, file.path),
-            "utf-8"
-          );
-        };
-
-        // Validate the registry item.
-        const result = registryItemSchema.safeParse(registryItem);
-        if (!result.success) {
-          logger.error(
-            `Invalid registry item found for ${highlighter.info(
-              registryItem.name
-            )}.`
-          );
-          continue;
-        }
-
-        logger.info(`Registry item found for ${registryItem.name}`)
-
-        // Write the registry item to the output directory.
-        await fs.writeFile(
-          path.resolve(resolvePaths.outputDir, `${result.data.name}.json`),
-          JSON.stringify(result.data, null, 2)
-        );
-      }
-
-      // Copy registry.json to the output directory.
-      await fs.copyFile(
-        resolvePaths.registryFile,
-        path.resolve(resolvePaths.outputDir, "registry.json")
+      await fs.writeFile(
+        path.join(outputDir, "index.json"),
+        JSON.stringify(index, null, 2)
       );
 
-      buildSpinner.succeed("Building registry.");
+      logger.info(`✓ Generated ${index.length} items`);
+      logger.info(`✓ Output directory: ${outputDir}`);
     } catch (error) {
-      logger.break();
-      handleError(error);
+      if (error instanceof z.ZodError) {
+        logger.error("Invalid registry.json format");
+        error.errors.forEach((err) => {
+          logger.error(`  ${err.path.join(".")}: ${err.message}`);
+        });
+      } else if (error instanceof Error) {
+        logger.error(error.message);
+      } else {
+        logger.error("Unknown error occurred");
+      }
+      process.exit(1);
     }
   });
