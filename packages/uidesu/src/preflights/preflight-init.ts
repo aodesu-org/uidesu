@@ -69,4 +69,9 @@ export async function preflightInit(
       projectInfo.framework.label
     )}.`
   )
+
+  return {
+    errors,
+    projectInfo,
+  }
 }
