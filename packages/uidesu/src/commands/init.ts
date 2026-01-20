@@ -1,12 +1,18 @@
 import path from "path"
 import { preflightInit } from "@/src/preflights/preflight-init"
+import { getRegistryStyles, getRegistryThemes } from "@/src/registry/api"
+import { rawConfigSchema } from "@/src/schema"
 import { createProject } from "@/src/utils/create-project"
 import { loadEnvFiles } from "@/src/utils/env-loader"
 import * as ERRORS from "@/src/utils/errors"
-import { getProjectInfo } from "@/src/utils/get-project-info"
+import { Config, getConfig, resolveConfigPaths } from "@/src/utils/get-config"
+import { getProjectConfig, getProjectInfo } from "@/src/utils/get-project-info"
 import { logger } from "@/src/utils/logger"
 import { Command } from "commander"
+import prompts from "prompts"
 import { z } from "zod"
+
+import { highlighter } from "../utils/highlighter"
 
 process.on("exit", (code) => {
   const filePath = path.resolve(process.cwd(), "uidesu.config.json")
@@ -64,7 +70,6 @@ export async function runInit(
   let projectInfo
   let newProjectTemplate
   const preflight = await preflightInit(options)
-  logger.info("Preflight checks completed.\n")
   if (preflight.errors[ERRORS.MISSING_DIR_OR_EMPTY_PROJECT]) {
     const { projectPath, template } = await createProject(options)
     if (!projectPath) {
@@ -75,6 +80,78 @@ export async function runInit(
     // Re-get project info for the newly created project.
     projectInfo = await getProjectInfo(options.cwd)
   } else {
-    projectInfo = await getProjectInfo(options.cwd)
+    projectInfo = preflight.projectInfo
   }
+
+  const projectConfig = await getProjectConfig(options.cwd, projectInfo)
+
+  console.log(projectConfig)
+
+  let config = projectConfig
+    ? await promptForMinimalConfig(projectConfig, options)
+    : await promptForConfig(await getConfig(options.cwd))
+
+  if (!options.yes) {
+    const { proceed } = await prompts({
+      type: "confirm",
+      name: "proceed",
+      message: `Write configuration to ${highlighter.info(
+        "uidesu.config.json"
+      )}. Proceed?`,
+      initial: true,
+    })
+
+    if (!proceed) {
+      process.exit(0)
+    }
+  }
+
+  const fullConfigForRegistry = await resolveConfigPaths(options.cwd, config)
+}
+
+async function promptForConfig(defaultConfig: Config | null = null) {
+  const [styles, themes] = await Promise.all([
+    getRegistryStyles(),
+    getRegistryThemes(),
+  ])
+
+  logger.info("")
+  const options = await prompts([
+    {
+      type: "toggle",
+      name: "typescript",
+      message: `Would you like to use ${highlighter.info(
+        "TypeScript"
+      )} (recommended)?`,
+      initial: defaultConfig?.tsx ?? true,
+      active: "yes",
+      inactive: "no",
+    },
+  ])
+
+  return rawConfigSchema.parse({
+    $schema: "https://ui.aodesu.com/schema.json",
+    tsx: options.typescript,
+  })
+}
+
+async function promptForMinimalConfig(
+  defaultConfig: Config,
+  opts: z.infer<typeof initOptionsSchema>
+) {
+  let style = defaultConfig.style
+  let theme = defaultConfig.tailwind.theme
+  let cssVariables = defaultConfig.tailwind.cssVariables
+
+  return rawConfigSchema.parse({
+    $schema: defaultConfig?.$schema,
+    style,
+    tailwind: {
+      ...defaultConfig?.tailwind,
+      theme,
+      cssVariables,
+    },
+    tsx: defaultConfig?.tsx,
+    aliases: defaultConfig?.aliases,
+  })
 }

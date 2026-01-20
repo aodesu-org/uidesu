@@ -20,7 +20,7 @@ export async function preflightInit(
     errors[ERRORS.MISSING_DIR_OR_EMPTY_PROJECT] = true
     return {
       errors,
-      ProjectInfo: null,
+      projectInfo: null,
     }
   }
 

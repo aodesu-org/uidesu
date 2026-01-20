@@ -59,6 +59,13 @@ export type Registry = z.infer<typeof registrySchema>
 
 export const registryIndexSchema = z.array(registryItemSchema)
 
+export const stylesSchema = z.array(
+  z.object({
+    name: z.string(),
+    label: z.string(),
+  })
+)
+
 export const registryResolvedItemsTreeSchema = registryItemSchema.pick({
   dependencies: true,
   devDependencies: true,
@@ -93,10 +100,11 @@ export const rawConfigSchema = z
   .object({
     $schema: z.string().optional(),
     style: z.string(),
+    tsx: z.coerce.boolean().default(true),
     tailwind: z.object({
       config: z.string().optional(),
       css: z.string(),
-      baseColor: z.string(),
+      theme: z.string(),
       cssVariables: z.boolean().default(true),
       prefix: z.string().default("").optional(),
     }),
@@ -106,6 +114,7 @@ export const rawConfigSchema = z
       ui: z.string().optional(),
       lib: z.string().optional(),
     }),
+    registries: registryConfigSchema.optional(),
   })
   .strict()
 

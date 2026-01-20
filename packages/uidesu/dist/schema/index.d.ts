@@ -96,6 +96,12 @@ declare const registryItemSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     type: "registry:lib" | "registry:ui" | "registry:style" | "registry:example" | "registry:internal";
     name: string;
+    title?: string | undefined;
+    author?: string | undefined;
+    description?: string | undefined;
+    dependencies?: string[] | undefined;
+    devDependencies?: string[] | undefined;
+    registryDependencies?: string[] | undefined;
     tailwind?: {
         config?: {
             content?: string[] | undefined;
@@ -103,12 +109,6 @@ declare const registryItemSchema: z.ZodObject<{
             plugins?: string[] | undefined;
         } | undefined;
     } | undefined;
-    title?: string | undefined;
-    author?: string | undefined;
-    description?: string | undefined;
-    dependencies?: string[] | undefined;
-    devDependencies?: string[] | undefined;
-    registryDependencies?: string[] | undefined;
     cssVars?: {
         theme?: Record<string, string> | undefined;
         light?: Record<string, string> | undefined;
@@ -118,6 +118,12 @@ declare const registryItemSchema: z.ZodObject<{
 }, {
     type: "registry:lib" | "registry:ui" | "registry:style" | "registry:example" | "registry:internal";
     name: string;
+    title?: string | undefined;
+    author?: string | undefined;
+    description?: string | undefined;
+    dependencies?: string[] | undefined;
+    devDependencies?: string[] | undefined;
+    registryDependencies?: string[] | undefined;
     tailwind?: {
         config?: {
             content?: string[] | undefined;
@@ -125,12 +131,6 @@ declare const registryItemSchema: z.ZodObject<{
             plugins?: string[] | undefined;
         } | undefined;
     } | undefined;
-    title?: string | undefined;
-    author?: string | undefined;
-    description?: string | undefined;
-    dependencies?: string[] | undefined;
-    devDependencies?: string[] | undefined;
-    registryDependencies?: string[] | undefined;
     cssVars?: {
         theme?: Record<string, string> | undefined;
         light?: Record<string, string> | undefined;
@@ -195,6 +195,12 @@ declare const registrySchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         type: "registry:lib" | "registry:ui" | "registry:style" | "registry:example" | "registry:internal";
         name: string;
+        title?: string | undefined;
+        author?: string | undefined;
+        description?: string | undefined;
+        dependencies?: string[] | undefined;
+        devDependencies?: string[] | undefined;
+        registryDependencies?: string[] | undefined;
         tailwind?: {
             config?: {
                 content?: string[] | undefined;
@@ -202,12 +208,6 @@ declare const registrySchema: z.ZodObject<{
                 plugins?: string[] | undefined;
             } | undefined;
         } | undefined;
-        title?: string | undefined;
-        author?: string | undefined;
-        description?: string | undefined;
-        dependencies?: string[] | undefined;
-        devDependencies?: string[] | undefined;
-        registryDependencies?: string[] | undefined;
         cssVars?: {
             theme?: Record<string, string> | undefined;
             light?: Record<string, string> | undefined;
@@ -217,6 +217,12 @@ declare const registrySchema: z.ZodObject<{
     }, {
         type: "registry:lib" | "registry:ui" | "registry:style" | "registry:example" | "registry:internal";
         name: string;
+        title?: string | undefined;
+        author?: string | undefined;
+        description?: string | undefined;
+        dependencies?: string[] | undefined;
+        devDependencies?: string[] | undefined;
+        registryDependencies?: string[] | undefined;
         tailwind?: {
             config?: {
                 content?: string[] | undefined;
@@ -224,12 +230,6 @@ declare const registrySchema: z.ZodObject<{
                 plugins?: string[] | undefined;
             } | undefined;
         } | undefined;
-        title?: string | undefined;
-        author?: string | undefined;
-        description?: string | undefined;
-        dependencies?: string[] | undefined;
-        devDependencies?: string[] | undefined;
-        registryDependencies?: string[] | undefined;
         cssVars?: {
             theme?: Record<string, string> | undefined;
             light?: Record<string, string> | undefined;
@@ -243,6 +243,12 @@ declare const registrySchema: z.ZodObject<{
     items: {
         type: "registry:lib" | "registry:ui" | "registry:style" | "registry:example" | "registry:internal";
         name: string;
+        title?: string | undefined;
+        author?: string | undefined;
+        description?: string | undefined;
+        dependencies?: string[] | undefined;
+        devDependencies?: string[] | undefined;
+        registryDependencies?: string[] | undefined;
         tailwind?: {
             config?: {
                 content?: string[] | undefined;
@@ -250,12 +256,6 @@ declare const registrySchema: z.ZodObject<{
                 plugins?: string[] | undefined;
             } | undefined;
         } | undefined;
-        title?: string | undefined;
-        author?: string | undefined;
-        description?: string | undefined;
-        dependencies?: string[] | undefined;
-        devDependencies?: string[] | undefined;
-        registryDependencies?: string[] | undefined;
         cssVars?: {
             theme?: Record<string, string> | undefined;
             light?: Record<string, string> | undefined;
@@ -269,6 +269,12 @@ declare const registrySchema: z.ZodObject<{
     items: {
         type: "registry:lib" | "registry:ui" | "registry:style" | "registry:example" | "registry:internal";
         name: string;
+        title?: string | undefined;
+        author?: string | undefined;
+        description?: string | undefined;
+        dependencies?: string[] | undefined;
+        devDependencies?: string[] | undefined;
+        registryDependencies?: string[] | undefined;
         tailwind?: {
             config?: {
                 content?: string[] | undefined;
@@ -276,12 +282,6 @@ declare const registrySchema: z.ZodObject<{
                 plugins?: string[] | undefined;
             } | undefined;
         } | undefined;
-        title?: string | undefined;
-        author?: string | undefined;
-        description?: string | undefined;
-        dependencies?: string[] | undefined;
-        devDependencies?: string[] | undefined;
-        registryDependencies?: string[] | undefined;
         cssVars?: {
             theme?: Record<string, string> | undefined;
             light?: Record<string, string> | undefined;
@@ -344,6 +344,12 @@ declare const registryIndexSchema: z.ZodArray<z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     type: "registry:lib" | "registry:ui" | "registry:style" | "registry:example" | "registry:internal";
     name: string;
+    title?: string | undefined;
+    author?: string | undefined;
+    description?: string | undefined;
+    dependencies?: string[] | undefined;
+    devDependencies?: string[] | undefined;
+    registryDependencies?: string[] | undefined;
     tailwind?: {
         config?: {
             content?: string[] | undefined;
@@ -351,12 +357,6 @@ declare const registryIndexSchema: z.ZodArray<z.ZodObject<{
             plugins?: string[] | undefined;
         } | undefined;
     } | undefined;
-    title?: string | undefined;
-    author?: string | undefined;
-    description?: string | undefined;
-    dependencies?: string[] | undefined;
-    devDependencies?: string[] | undefined;
-    registryDependencies?: string[] | undefined;
     cssVars?: {
         theme?: Record<string, string> | undefined;
         light?: Record<string, string> | undefined;
@@ -366,6 +366,12 @@ declare const registryIndexSchema: z.ZodArray<z.ZodObject<{
 }, {
     type: "registry:lib" | "registry:ui" | "registry:style" | "registry:example" | "registry:internal";
     name: string;
+    title?: string | undefined;
+    author?: string | undefined;
+    description?: string | undefined;
+    dependencies?: string[] | undefined;
+    devDependencies?: string[] | undefined;
+    registryDependencies?: string[] | undefined;
     tailwind?: {
         config?: {
             content?: string[] | undefined;
@@ -373,18 +379,22 @@ declare const registryIndexSchema: z.ZodArray<z.ZodObject<{
             plugins?: string[] | undefined;
         } | undefined;
     } | undefined;
-    title?: string | undefined;
-    author?: string | undefined;
-    description?: string | undefined;
-    dependencies?: string[] | undefined;
-    devDependencies?: string[] | undefined;
-    registryDependencies?: string[] | undefined;
     cssVars?: {
         theme?: Record<string, string> | undefined;
         light?: Record<string, string> | undefined;
         dark?: Record<string, string> | undefined;
     } | undefined;
     css?: Record<string, any> | undefined;
+}>, "many">;
+declare const stylesSchema: z.ZodArray<z.ZodObject<{
+    name: z.ZodString;
+    label: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    name: string;
+    label: string;
+}, {
+    name: string;
+    label: string;
 }>, "many">;
 declare const registryResolvedItemsTreeSchema: z.ZodObject<Pick<{
     name: z.ZodString;
@@ -436,7 +446,9 @@ declare const registryResolvedItemsTreeSchema: z.ZodObject<Pick<{
         dark?: Record<string, string> | undefined;
     }>>;
     css: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodType<any, z.ZodTypeDef, any>>>;
-}, "tailwind" | "dependencies" | "devDependencies" | "cssVars" | "css">, "strip", z.ZodTypeAny, {
+}, "dependencies" | "devDependencies" | "tailwind" | "cssVars" | "css">, "strip", z.ZodTypeAny, {
+    dependencies?: string[] | undefined;
+    devDependencies?: string[] | undefined;
     tailwind?: {
         config?: {
             content?: string[] | undefined;
@@ -444,8 +456,6 @@ declare const registryResolvedItemsTreeSchema: z.ZodObject<Pick<{
             plugins?: string[] | undefined;
         } | undefined;
     } | undefined;
-    dependencies?: string[] | undefined;
-    devDependencies?: string[] | undefined;
     cssVars?: {
         theme?: Record<string, string> | undefined;
         light?: Record<string, string> | undefined;
@@ -453,6 +463,8 @@ declare const registryResolvedItemsTreeSchema: z.ZodObject<Pick<{
     } | undefined;
     css?: Record<string, any> | undefined;
 }, {
+    dependencies?: string[] | undefined;
+    devDependencies?: string[] | undefined;
     tailwind?: {
         config?: {
             content?: string[] | undefined;
@@ -460,8 +472,6 @@ declare const registryResolvedItemsTreeSchema: z.ZodObject<Pick<{
             plugins?: string[] | undefined;
         } | undefined;
     } | undefined;
-    dependencies?: string[] | undefined;
-    devDependencies?: string[] | undefined;
     cssVars?: {
         theme?: Record<string, string> | undefined;
         light?: Record<string, string> | undefined;
@@ -498,21 +508,22 @@ declare const registryConfigSchema: z.ZodRecord<z.ZodEffects<z.ZodString, string
 declare const rawConfigSchema: z.ZodObject<{
     $schema: z.ZodOptional<z.ZodString>;
     style: z.ZodString;
+    tsx: z.ZodDefault<z.ZodBoolean>;
     tailwind: z.ZodObject<{
         config: z.ZodOptional<z.ZodString>;
         css: z.ZodString;
-        baseColor: z.ZodString;
+        theme: z.ZodString;
         cssVariables: z.ZodDefault<z.ZodBoolean>;
         prefix: z.ZodOptional<z.ZodDefault<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
+        theme: string;
         css: string;
-        baseColor: string;
         cssVariables: boolean;
         config?: string | undefined;
         prefix?: string | undefined;
     }, {
+        theme: string;
         css: string;
-        baseColor: string;
         config?: string | undefined;
         cssVariables?: boolean | undefined;
         prefix?: string | undefined;
@@ -533,15 +544,29 @@ declare const rawConfigSchema: z.ZodObject<{
         ui?: string | undefined;
         lib?: string | undefined;
     }>;
+    registries: z.ZodOptional<z.ZodRecord<z.ZodEffects<z.ZodString, string, string>, z.ZodUnion<[z.ZodEffects<z.ZodString, string, string>, z.ZodObject<{
+        url: z.ZodEffects<z.ZodString, string, string>;
+        params: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+        headers: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }, {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }>]>>>;
 }, "strict", z.ZodTypeAny, {
     tailwind: {
+        theme: string;
         css: string;
-        baseColor: string;
         cssVariables: boolean;
         config?: string | undefined;
         prefix?: string | undefined;
     };
     style: string;
+    tsx: boolean;
     aliases: {
         components: string;
         utils: string;
@@ -549,10 +574,15 @@ declare const rawConfigSchema: z.ZodObject<{
         lib?: string | undefined;
     };
     $schema?: string | undefined;
+    registries?: Record<string, string | {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }> | undefined;
 }, {
     tailwind: {
+        theme: string;
         css: string;
-        baseColor: string;
         config?: string | undefined;
         cssVariables?: boolean | undefined;
         prefix?: string | undefined;
@@ -565,25 +595,32 @@ declare const rawConfigSchema: z.ZodObject<{
         lib?: string | undefined;
     };
     $schema?: string | undefined;
+    tsx?: boolean | undefined;
+    registries?: Record<string, string | {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }> | undefined;
 }>;
 declare const configSchema: z.ZodObject<{
     $schema: z.ZodOptional<z.ZodString>;
     style: z.ZodString;
+    tsx: z.ZodDefault<z.ZodBoolean>;
     tailwind: z.ZodObject<{
         config: z.ZodOptional<z.ZodString>;
         css: z.ZodString;
-        baseColor: z.ZodString;
+        theme: z.ZodString;
         cssVariables: z.ZodDefault<z.ZodBoolean>;
         prefix: z.ZodOptional<z.ZodDefault<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
+        theme: string;
         css: string;
-        baseColor: string;
         cssVariables: boolean;
         config?: string | undefined;
         prefix?: string | undefined;
     }, {
+        theme: string;
         css: string;
-        baseColor: string;
         config?: string | undefined;
         cssVariables?: boolean | undefined;
         prefix?: string | undefined;
@@ -604,6 +641,19 @@ declare const configSchema: z.ZodObject<{
         ui?: string | undefined;
         lib?: string | undefined;
     }>;
+    registries: z.ZodOptional<z.ZodRecord<z.ZodEffects<z.ZodString, string, string>, z.ZodUnion<[z.ZodEffects<z.ZodString, string, string>, z.ZodObject<{
+        url: z.ZodEffects<z.ZodString, string, string>;
+        params: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+        headers: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }, {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }>]>>>;
 } & {
     resolvedPaths: z.ZodObject<{
         cwd: z.ZodString;
@@ -615,16 +665,16 @@ declare const configSchema: z.ZodObject<{
         ui: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         components: string;
-        ui: string;
         utils: string;
+        ui: string;
         lib: string;
         cwd: string;
         tailwindConfig: string;
         tailwindCss: string;
     }, {
         components: string;
-        ui: string;
         utils: string;
+        ui: string;
         lib: string;
         cwd: string;
         tailwindConfig: string;
@@ -632,13 +682,14 @@ declare const configSchema: z.ZodObject<{
     }>;
 }, "strict", z.ZodTypeAny, {
     tailwind: {
+        theme: string;
         css: string;
-        baseColor: string;
         cssVariables: boolean;
         config?: string | undefined;
         prefix?: string | undefined;
     };
     style: string;
+    tsx: boolean;
     aliases: {
         components: string;
         utils: string;
@@ -647,18 +698,23 @@ declare const configSchema: z.ZodObject<{
     };
     resolvedPaths: {
         components: string;
-        ui: string;
         utils: string;
+        ui: string;
         lib: string;
         cwd: string;
         tailwindConfig: string;
         tailwindCss: string;
     };
     $schema?: string | undefined;
+    registries?: Record<string, string | {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }> | undefined;
 }, {
     tailwind: {
+        theme: string;
         css: string;
-        baseColor: string;
         config?: string | undefined;
         cssVariables?: boolean | undefined;
         prefix?: string | undefined;
@@ -672,33 +728,40 @@ declare const configSchema: z.ZodObject<{
     };
     resolvedPaths: {
         components: string;
-        ui: string;
         utils: string;
+        ui: string;
         lib: string;
         cwd: string;
         tailwindConfig: string;
         tailwindCss: string;
     };
     $schema?: string | undefined;
+    tsx?: boolean | undefined;
+    registries?: Record<string, string | {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }> | undefined;
 }>;
 declare const workspaceConfigSchema: z.ZodRecord<z.ZodString, z.ZodObject<{
     $schema: z.ZodOptional<z.ZodString>;
     style: z.ZodString;
+    tsx: z.ZodDefault<z.ZodBoolean>;
     tailwind: z.ZodObject<{
         config: z.ZodOptional<z.ZodString>;
         css: z.ZodString;
-        baseColor: z.ZodString;
+        theme: z.ZodString;
         cssVariables: z.ZodDefault<z.ZodBoolean>;
         prefix: z.ZodOptional<z.ZodDefault<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
+        theme: string;
         css: string;
-        baseColor: string;
         cssVariables: boolean;
         config?: string | undefined;
         prefix?: string | undefined;
     }, {
+        theme: string;
         css: string;
-        baseColor: string;
         config?: string | undefined;
         cssVariables?: boolean | undefined;
         prefix?: string | undefined;
@@ -719,6 +782,19 @@ declare const workspaceConfigSchema: z.ZodRecord<z.ZodString, z.ZodObject<{
         ui?: string | undefined;
         lib?: string | undefined;
     }>;
+    registries: z.ZodOptional<z.ZodRecord<z.ZodEffects<z.ZodString, string, string>, z.ZodUnion<[z.ZodEffects<z.ZodString, string, string>, z.ZodObject<{
+        url: z.ZodEffects<z.ZodString, string, string>;
+        params: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+        headers: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }, {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }>]>>>;
 } & {
     resolvedPaths: z.ZodObject<{
         cwd: z.ZodString;
@@ -730,16 +806,16 @@ declare const workspaceConfigSchema: z.ZodRecord<z.ZodString, z.ZodObject<{
         ui: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         components: string;
-        ui: string;
         utils: string;
+        ui: string;
         lib: string;
         cwd: string;
         tailwindConfig: string;
         tailwindCss: string;
     }, {
         components: string;
-        ui: string;
         utils: string;
+        ui: string;
         lib: string;
         cwd: string;
         tailwindConfig: string;
@@ -747,13 +823,14 @@ declare const workspaceConfigSchema: z.ZodRecord<z.ZodString, z.ZodObject<{
     }>;
 }, "strict", z.ZodTypeAny, {
     tailwind: {
+        theme: string;
         css: string;
-        baseColor: string;
         cssVariables: boolean;
         config?: string | undefined;
         prefix?: string | undefined;
     };
     style: string;
+    tsx: boolean;
     aliases: {
         components: string;
         utils: string;
@@ -762,18 +839,23 @@ declare const workspaceConfigSchema: z.ZodRecord<z.ZodString, z.ZodObject<{
     };
     resolvedPaths: {
         components: string;
-        ui: string;
         utils: string;
+        ui: string;
         lib: string;
         cwd: string;
         tailwindConfig: string;
         tailwindCss: string;
     };
     $schema?: string | undefined;
+    registries?: Record<string, string | {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }> | undefined;
 }, {
     tailwind: {
+        theme: string;
         css: string;
-        baseColor: string;
         config?: string | undefined;
         cssVariables?: boolean | undefined;
         prefix?: string | undefined;
@@ -787,14 +869,20 @@ declare const workspaceConfigSchema: z.ZodRecord<z.ZodString, z.ZodObject<{
     };
     resolvedPaths: {
         components: string;
-        ui: string;
         utils: string;
+        ui: string;
         lib: string;
         cwd: string;
         tailwindConfig: string;
         tailwindCss: string;
     };
     $schema?: string | undefined;
+    tsx?: boolean | undefined;
+    registries?: Record<string, string | {
+        url: string;
+        params?: Record<string, string> | undefined;
+        headers?: Record<string, string> | undefined;
+    }> | undefined;
 }>>;
 
-export { type Registry, type RegistryItem, configSchema, rawConfigSchema, registryConfigItemSchema, registryConfigSchema, registryIndexSchema, registryItemCssSchema, registryItemCssVarsSchema, registryItemEnvVarsSchema, registryItemSchema, registryItemTailwindSchema, registryItemTypeSchema, registryResolvedItemsTreeSchema, registrySchema, workspaceConfigSchema };
+export { type Registry, type RegistryItem, configSchema, rawConfigSchema, registryConfigItemSchema, registryConfigSchema, registryIndexSchema, registryItemCssSchema, registryItemCssVarsSchema, registryItemEnvVarsSchema, registryItemSchema, registryItemTailwindSchema, registryItemTypeSchema, registryResolvedItemsTreeSchema, registrySchema, stylesSchema, workspaceConfigSchema };
