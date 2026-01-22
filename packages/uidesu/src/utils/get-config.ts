@@ -36,7 +36,7 @@ export async function resolveConfigPaths(
 
   // Read tsconfig.json.
   const tsConfig = await loadConfig(cwd)
-  console.log("aki1")
+
   if (tsConfig.resultType === "failed") {
     throw new Error(
       `Failed to load ${config.tsx ? "tsconfig" : "jsconfig"}.json. ${
@@ -45,13 +45,14 @@ export async function resolveConfigPaths(
     )
   }
 
-  const test = configSchema.parse({
+  return configSchema.parse({
     ...config,
     resolvedPaths: {
       cwd,
       tailwindConfig: config.tailwind.config
         ? path.resolve(cwd, config.tailwind.config)
         : "",
+      tailwindCss: path.resolve(cwd, config.tailwind.css),
       utils: await resolveImport(config.aliases["utils"], tsConfig),
       components: await resolveImport(config.aliases["components"], tsConfig),
       ui: config.aliases["ui"]
@@ -69,10 +70,6 @@ export async function resolveConfigPaths(
           ),
     },
   })
-
-  console.log(test)
-
-  return test
 }
 
 export async function getRawConfig(

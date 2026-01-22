@@ -24,7 +24,7 @@ export async function preflightInit(
     }
   }
 
-  const projectSpinner = spinner("Preflight checks.").start()
+  const projectSpinner = spinner(" Preflight checks.").start()
 
   if (fs.existsSync(path.resolve(options.cwd, "uidesu.config.json"))) {
     projectSpinner?.fail()
@@ -65,7 +65,7 @@ export async function preflightInit(
     process.exit(1)
   }
   frameworkSpinner?.succeed(
-    `Verifying framework. Found ${highlighter.info(
+    ` Verifying framework.\n   - Found ${highlighter.info(
       projectInfo.framework.label
     )}.`
   )

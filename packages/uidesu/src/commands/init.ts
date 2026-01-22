@@ -1,3 +1,4 @@
+import { promises as fs } from "fs"
 import path from "path"
 import { preflightInit } from "@/src/preflights/preflight-init"
 import { getRegistryStyles, getRegistryThemes } from "@/src/registry/api"
@@ -7,12 +8,16 @@ import { loadEnvFiles } from "@/src/utils/env-loader"
 import * as ERRORS from "@/src/utils/errors"
 import { Config, getConfig, resolveConfigPaths } from "@/src/utils/get-config"
 import { getProjectConfig, getProjectInfo } from "@/src/utils/get-project-info"
+import { handleError } from "@/src/utils/handle-error"
+import { highlighter } from "@/src/utils/highlighter"
 import { logger } from "@/src/utils/logger"
 import { Command } from "commander"
+import deepmerge from "deepmerge"
 import prompts from "prompts"
 import { z } from "zod"
 
-import { highlighter } from "../utils/highlighter"
+import { BUILTIN_REGISTRIES } from "../registry/constants"
+import { spinner } from "../utils/spinner"
 
 process.on("exit", (code) => {
   const filePath = path.resolve(process.cwd(), "uidesu.config.json")
@@ -55,10 +60,14 @@ export const init = new Command()
 
       await runInit(options)
 
-      logger.success(`Initialized uidesu in directory: ${opts.cwd}`)
-      logger.break()
+      logger.log(
+        `${highlighter.success(
+          "Success!"
+        )} Project initialization completed.\nYou may now add components.`
+      )
     } catch (error) {
       logger.break()
+      handleError(error)
     }
   })
 
@@ -107,6 +116,33 @@ export async function runInit(
   }
 
   const fullConfigForRegistry = await resolveConfigPaths(options.cwd, config)
+  /* const { config: configWithRegistries } = await ensureRegistriesInConfig(
+    components,
+    fullConfigForRegistry,
+    {
+      silent: true,
+    }
+  ) */
+
+  const componentSpinner = spinner(" Writing components.json").start()
+  const targetPath = path.resolve(options.cwd, "uidesu.config.json")
+
+  const mergeConfig = (base: typeof config, override: object) => {
+    const { registries, ...merged } = deepmerge(base, override)
+    return { ...merged, registries } as typeof config
+  }
+
+  // Make sure to filter out built-in registries.
+  // TODO: fix this in ensureRegistriesInConfig.
+  config.registries = Object.fromEntries(
+    Object.entries(config.registries || {}).filter(
+      ([key]) => !Object.keys(BUILTIN_REGISTRIES).includes(key)
+    )
+  )
+
+  // Write uidesu.config.json
+  await fs.writeFile(targetPath, `${JSON.stringify(config, null, 2)}\n`, "utf8")
+  componentSpinner.succeed()
 }
 
 async function promptForConfig(defaultConfig: Config | null = null) {

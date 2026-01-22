@@ -279,7 +279,5 @@ export async function getProjectConfig(
     },
   }
 
-  console.log("test")
-  console.log(await resolveConfigPaths(cwd, config))
   return await resolveConfigPaths(cwd, config)
 }
